@@ -28,7 +28,6 @@ export const NavLogoText = styled.div`
    font-size: 3.2rem;
    font-weight: 700;
    text-transform: uppercase;
-   cursor: pointer;
    transition: all 0.2s;
    color: #f64740;
 `
@@ -38,7 +37,6 @@ export const NavLogoSubText = styled.div`
    line-height: 1.1;
    font-weight: 700;
    text-transform: uppercase;
-   cursor: pointer;
    transition: all 0.2s;
    color: #f64740;
 `

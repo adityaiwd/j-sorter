@@ -1,14 +1,7 @@
 import Link from 'next/link'
 import { useTheme } from '@mui/material'
-import {
-   NavInnerWrapper,
-   NavWrapper,
-   NavLogo,
-   LayoutWrapper,
-   NavLogoText,
-   NavLogoSubText,
-   Main,
-} from './style'
+import { NavInnerWrapper, NavWrapper, LayoutWrapper, Main } from './style'
+import Logo from './Logo'
 import Copyright from '../src/Copyright'
 
 const Navbar = ({ children }) => {
@@ -18,21 +11,22 @@ const Navbar = ({ children }) => {
          <NavWrapper>
             <NavInnerWrapper>
                <Link passHref href="/">
-                  <NavLogo>
-                     <NavLogoText style={{ color: theme.palette.primary }}>
-                        JKT48
-                     </NavLogoText>
-                     <div>
-                        <NavLogoSubText>Member</NavLogoSubText>
-                        <NavLogoSubText>Sorter</NavLogoSubText>
-                     </div>
-                  </NavLogo>
+                  <div style={{ cursor: 'pointer' }}>
+                     <Logo />
+                  </div>
                </Link>
             </NavInnerWrapper>
          </NavWrapper>
          <Main>
             {children}
-            <footer style={{ position: 'absolute', bottom: 0, width: '100%', paddingBottom: '2rem' }}>
+            <footer
+               style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  width: '100%',
+                  paddingBottom: '2rem',
+               }}
+            >
                <Copyright />
             </footer>
          </Main>
