@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Grid, Container, Typography, Box, Button, Chip } from '@mui/material'
-import Image1 from '../assets/member/fiony_alveria.jpg'
 import MemberImage from '../components/MemberImage'
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel'
 
@@ -11,7 +10,6 @@ export default function Sort() {
             <Typography
                variant="h3"
                component="h3"
-               color="primary"
                sx={{ fontWeight: 300 }}
                mb={4}
                textAlign="center"
@@ -24,18 +22,17 @@ export default function Sort() {
                spacing={1}
                sx={{ height: 300 }}
             >
-               <MemberImage src={Image1} name="Fiony Alveria Tantri" />
+               <MemberImage src={'/assets/member/fiony_alveria.jpg'} name="Fiony Alveria Tantri" />
                <Grid item xs={2} sx={{ textAlign: 'center' }}>
                   <Typography
                      variant="h4"
                      component="h4"
-                     color="primary"
                      sx={{ fontWeight: 300 }}
                   >
                      OR
                   </Typography>
                </Grid>
-               <MemberImage src={Image1} name="Fiony Alveria Tantri" />
+               <MemberImage src={'/assets/member/Cindy_2021.webp'} name="Cindy Hapsari Maharani Pujiantoro Putri" />
             </Grid>
             <Grid container direction="column" spacing={2} my={2}>
                <Grid item xs={12}>
@@ -125,15 +122,6 @@ export default function Sort() {
                />
             </Box>
          </Box>
-         {/* <Box >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Next.js example
-        </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
-        <ProTip />
-    </Box> */}
       </Container>
    )
 }
