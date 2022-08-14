@@ -15,7 +15,6 @@ const MemberImage = ({ src, name }) => {
          <Typography
             variant="h5"
             component="h5"
-            color="primary"
             align='center'
             sx={{
                fontWeight: 700,
