@@ -3,12 +3,14 @@ import Image from 'next/image'
 import { Wrapper } from './style'
 import { Paper, Typography } from '@mui/material'
 
-const MemberImage = ({ src, name }) => {
+const MemberImage = ({ src, name, onClick }) => {
+   console.log(src)
    return (
       <Wrapper item xs={5} alignSelf="stretch">
          <Paper
             elevation={2}
             sx={{ height: '90%', position: 'relative', overflow: 'hidden', borderRadius:2 }}
+            onClick={onClick}
          >
             <Image priority src={src} alt={name} layout="fill" objectFit='contain' />
          </Paper>

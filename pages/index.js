@@ -9,13 +9,13 @@ import {
    TextField,
    Box,
    FormControl,
-   InputLabel,
-   FilledInput,
+   Switch,
    Select,
    Chip,
    Button,
 } from '@mui/material'
 import MSButton from '../components/MSButton'
+import useJMSStore from '../hooks'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -87,8 +87,8 @@ const generationOptions = [
 ]
 
 export default function Index() {
-   const theme = useTheme()
    const router = useRouter()
+   const createFilters = useJMSStore(state => state.createFilters)
    const [memberStatus, setMemberStatus] = useState('')
    const [generations, setGenerations] = useState([])
    const handleChange = (event) => {
@@ -101,9 +101,8 @@ export default function Index() {
       )
    }
    const handleStart = () => {
-      console.log(memberStatus)
-      console.log(generations)
-      // router.push('/sort')
+      createFilters(memberStatus,generations)
+      router.push('/sort')
    }
    return (
       <Container maxWidth="sm">
@@ -131,7 +130,8 @@ export default function Index() {
                variant="h5"
                component="h5"
                sx={{ fontWeight: 600 }}
-               my={2}
+               mt={2}
+               mb={1}
             >
                Select Filters
             </Typography>
@@ -157,7 +157,7 @@ export default function Index() {
                   </MenuItem>
                ))}
             </TextField>
-            <FormControl fullWidth variant="filled" sx={{mt: 1, mb: 3}}>
+            <FormControl fullWidth variant="filled" sx={{mt: 1}}>
                <Select
                   labelId="demo-multiple-chip-label"
                   id="demo-multiple-chip"
@@ -197,6 +197,10 @@ export default function Index() {
                   )})}
                </Select>
             </FormControl>
+            <Box sx={{display:'flex', alignItems:'center'}} mb={3}>
+               <Switch />
+               <Typography sx={{fontSize: '1.2rem', fontWeight: 600}}>All Generation</Typography>
+            </Box>
             <MSButton disabled={generations.length === 0 || memberStatus === null} onClick={handleStart}>
                Start Sorting!
             </MSButton>
