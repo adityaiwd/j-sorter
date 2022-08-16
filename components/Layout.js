@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useTheme } from '@mui/material'
-import { NavInnerWrapper, NavWrapper, LayoutWrapper, Main } from './style'
+import { NavInnerWrapper, NavWrapper, LayoutWrapper, Main, FooterDivider } from './style'
 import Logo from './Logo'
 import Copyright from '../src/Copyright'
 
@@ -19,6 +19,7 @@ const Navbar = ({ children }) => {
          </NavWrapper>
          <Main>
             {children}
+            <FooterDivider />
             <footer
                style={{
                   position: 'absolute',

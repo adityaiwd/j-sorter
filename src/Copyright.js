@@ -4,7 +4,7 @@ import MuiLink from '@mui/material/Link';
 
 export default function Copyright() {
   return (
-    <Typography variant="h6" color="primary" align="center" sx={{textTransform:'uppercase', fontSize: '1.4rem', fontWeight: 600}}>
+    <Typography variant="h6" color="primary" align="center" sx={{textTransform:'uppercase', fontSize: '1.2rem', fontWeight: 600}}>
       Copyright © {new Date().getFullYear()},{' '}
       <MuiLink color="inherit" href="https://https://rebornian48.github.io/" target="_blank" rel="noopener noreferrer">
        Rebornian48

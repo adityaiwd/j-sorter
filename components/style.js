@@ -56,3 +56,8 @@ export const Main = styled.main`
    min-height: 100vh;
    padding-top: 12rem;
 `
+
+export const FooterDivider = styled.div`
+   width: 100%;
+   height: 7rem;
+`

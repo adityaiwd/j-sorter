@@ -1,7 +1,9 @@
 import * as React from 'react'
 import '../styles/global.css'
+import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types'
 import Head from 'next/head'
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider } from '@emotion/react'
@@ -26,6 +28,7 @@ export default function MyApp(props) {
         <CssBaseline />
         <Layout>
           <Component {...pageProps} />
+          <ToastContainer />
         </Layout>
       </ThemeProvider>
     </CacheProvider>

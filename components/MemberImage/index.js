@@ -4,7 +4,6 @@ import { Wrapper } from './style'
 import { Paper, Typography } from '@mui/material'
 
 const MemberImage = ({ src, name, onClick }) => {
-   console.log(src)
    return (
       <Wrapper item xs={5} alignSelf="stretch">
          <Paper
