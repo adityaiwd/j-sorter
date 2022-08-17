@@ -1,7 +1,10 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Grid, Container, Typography, Box, Button, Chip, Skeleton } from '@mui/material';
+import { statusOptions, generationOptionsConst } from '../constants';
+import useJMSStore from '../hooks';
 import MemberImage from '../components/MemberImage';
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
 import { SortResult, updateMemberScore, undoLastPick } from '../src/db';
@@ -44,6 +47,7 @@ const memberProps = {
 
 export default function Sort() {
   const router = useRouter();
+  const [memberStatus, generations] = useJMSStore(state => [state.memberStatus, state.generations], shallow);
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
@@ -64,7 +68,7 @@ export default function Sort() {
   const [undoCalled, setUndoCalled] = useState(false);
   const matchChecker = useCallback(() => {
     if (sortProgress === 100 || undoCalled) {
-      return 
+      return;
     }
     const match = getMultipleRandom(members, 2);
     if (!match[0].matched.includes(match[1].id) && !match[1].matched.includes(match[0].id)) {
@@ -79,8 +83,8 @@ export default function Sort() {
     if (sortProgress === 100) {
       return;
     }
-    if(undoCalled) {
-      setUndoCalled(false)
+    if (undoCalled) {
+      setUndoCalled(false);
     }
     updateMemberScore(member1, member2, member1Score, member2Score);
     setMatchCounter(matchCounter + 1);
@@ -95,7 +99,7 @@ export default function Sort() {
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     if (sortProgress === 100) {
       return;
     }
@@ -103,13 +107,13 @@ export default function Sort() {
       if (matchCounter === combinations(members.length, 2)) {
         return;
       }
-      if(matchCounter === 0) {
+      if (matchCounter === 0) {
         setMatchCounter(history.length);
       }
       matchChecker();
     }
-    setLoading(false)
-  }, [members, router,  matchCounter, history, sortProgress, matchChecker]);
+    setLoading(false);
+  }, [members, router, matchCounter, history, sortProgress, matchChecker]);
 
   if (!members || !history) {
     return null;
@@ -162,20 +166,22 @@ export default function Sort() {
               TIE!
             </Button>
           </Grid>
-          {matchCounter === 0 || history.length === 0 ? null : <Grid item xs={12}>
-            <Button
-              variant="contained"
-              sx={{
-                width: '100%',
-                fontSize: '1.6rem',
-                paddingY: '1.6rem',
-                borderRadius: '3.6rem',
-              }}
-              onClick={() => handleUndo()}
-            >
-              Undo Last Pick
-            </Button>
-          </Grid>}
+          {matchCounter === 0 || history.length === 0 ? null : (
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                sx={{
+                  width: '100%',
+                  fontSize: '1.6rem',
+                  paddingY: '1.6rem',
+                  borderRadius: '3.6rem',
+                }}
+                onClick={() => handleUndo()}
+              >
+                Undo Last Pick
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Box>
       <Box sx={{ width: '100%' }} mt={6}>
@@ -200,7 +206,19 @@ export default function Sort() {
             },
           }}
         >
-          <Chip label="Current Members" color="primary" sx={{ fontWeight: 600, fontSize: '1.6rem' }} />
+          <Chip
+            label={statusOptions[memberStatus - 1].label}
+            color="primary"
+            sx={{ fontWeight: 600, fontSize: '1.6rem' }}
+          />
+          {generations.split('|').map((generation, index) => (
+            <Chip
+              key={index}
+              label={generationOptionsConst[Number(generation) - 1].label}
+              color="primary"
+              sx={{ fontWeight: 600, fontSize: '1.6rem' }}
+            />
+          ))}
         </Box>
       </Box>
     </Container>

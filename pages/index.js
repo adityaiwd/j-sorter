@@ -2,87 +2,13 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Container, Typography, MenuItem, TextField, Box, FormControl, Switch, Select, Chip } from '@mui/material';
+import { statusOptions, generationOptionsConst, MenuProps } from '../constants';
 import MSButton from '../components/MSButton';
 import useJMSStore from '../hooks';
 import { bulkAddFilteredMembers, SortResult } from '../src/db';
 import { filteredMembers } from '../src/queries';
 import { toast } from 'react-toastify';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-const statusOptions = [
-  {
-    value: 1,
-    label: 'Active',
-  },
-  {
-    value: 2,
-    label: 'Graduated / Ex-members',
-  },
-  {
-    value: 3,
-    label: 'All',
-  },
-];
-
-const generationOptionsConst = [
-  {
-    value: 1,
-    label: 'Gen 1',
-  },
-  {
-    value: 2,
-    label: 'Gen 2',
-  },
-  {
-    value: 3,
-    label: 'Gen 3',
-    isActive: true,
-  },
-  {
-    value: 4,
-    label: 'Gen 4',
-    isActive: true,
-  },
-  {
-    value: 5,
-    label: 'Gen 5',
-  },
-  {
-    value: 6,
-    label: 'Gen 6',
-    isActive: true,
-  },
-  {
-    value: 7,
-    label: 'Gen 7',
-    isActive: true,
-  },
-  {
-    value: 8,
-    label: 'Gen 8',
-    isActive: true,
-  },
-  {
-    value: 9,
-    label: 'Gen 9',
-    isActive: true,
-  },
-  {
-    value: 10,
-    label: 'Gen 10',
-    isActive: true,
-  },
-];
 
 export default function Index() {
   const router = useRouter();
@@ -125,13 +51,9 @@ export default function Index() {
   };
 
   const handleStart = () => {
-    if (members.length > 0) {
-      SortResult.members.clear();
-      SortResult.history.clear();
-    }
     if (filteredMembers(memberStatus, generations).length < 2) {
       toast.error(
-        "The total of filtered members is only one 😭  \n To start sorting, you need 2 or more filtered members",
+        "To start sorting, you need 2 or more filtered members",
         {
           position: 'bottom-center',
           autoClose: 6000,
@@ -145,7 +67,11 @@ export default function Index() {
       );
       return;
     }
-    createFilters(memberStatus, generations);
+    if (members.length > 0) {
+      SortResult.members.clear();
+      SortResult.history.clear();
+    }
+    createFilters(memberStatus, generations.join('|'));
     bulkAddFilteredMembers(filteredMembers(memberStatus, generations));
     router.push('/sort');
   };

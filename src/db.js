@@ -18,7 +18,8 @@ const addToHistory = async match => {
 export const selectedMembers = async () => await SortResult.members.toArray();
 
 export const bulkAddFilteredMembers = async members => {
-  await SortResult.members.bulkAdd(members);
+  const withScoreAndMatched = members.map(member => ({...member, score: 0, matched: []}))
+  await SortResult.members.bulkAdd(withScoreAndMatched);
 };
 
 export const updateMemberScore = async (member1, member2, increaseNumber1, increaseNumber2) => {
