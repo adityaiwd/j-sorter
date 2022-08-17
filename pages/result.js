@@ -23,12 +23,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import MSButton from '../components/MSButton';
-import useJMSStore from '../hooks';
 import { SortResult } from '../src/db';
-import { filteredMembers } from '../src/queries';
 
 export default function Index() {
+  const theme = useTheme()
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
@@ -55,7 +53,7 @@ export default function Index() {
                   {index + 1}
                 </Typography>
                 <Paper
-                  sx={{ height: '100%', width: 120, position: 'relative', overflow: 'hidden', borderRadius: 2, mx: 2 }}
+                  sx={{ height: '100%', width: 120, position: 'relative', overflow: 'hidden', borderRadius: 2, mx: 2, backgroundColor: theme.palette.primary.main }}
                 >
                   <Image src={data.picture} alt={data.name} layout="fill" objectFit="contain" />
                 </Paper>

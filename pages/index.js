@@ -82,7 +82,7 @@ export default function Index() {
           Welcome to JKT48 Member Sorter!
         </Typography>
         <Typography variant="h5" component="h5" align="center" sx={{ fontWeight: 400 }} mt={2}>
-          A simple website to sort your favorite JKT48 members
+          A fanmade JKT48 website to sort your favorite JKT48 members
         </Typography>
       </Box>
       <Box component="div" mt={4}>

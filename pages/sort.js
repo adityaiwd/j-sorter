@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useTheme } from '@mui/material';
 import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -47,6 +48,7 @@ const memberProps = {
 
 export default function Sort() {
   const router = useRouter();
+  const theme = useTheme();
   const [memberStatus, generations] = useJMSStore(state => [state.memberStatus, state.generations], shallow);
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
@@ -80,6 +82,7 @@ export default function Sort() {
   }, [sortProgress, members, undoCalled]);
 
   const handlePick = (member1Score, member2Score) => {
+    setLoading(true);
     if (sortProgress === 100) {
       return;
     }
@@ -128,23 +131,35 @@ export default function Sort() {
         {sortProgress === 100 ? (
           <MSButton onClick={() => router.replace('/result')}>View Result</MSButton>
         ) : (
-          <Grid container alignItems="center" spacing={1} sx={{ height: 300 }}>
+          <Grid
+            container
+            alignItems="center"
+            spacing={1}
+            sx={{
+              height: 250,
+              mb: 4,
+              px: 2,
+              [theme.breakpoints.down('sm')]: {
+                height: 200,
+              },
+            }}
+          >
             {!loading && member1.id ? (
               <MemberImage src={member1.picture} name={member1.name} onClick={() => handlePick(2, 0)} />
             ) : (
-              <Grid item xs={5} alignSelf="stretch">
+              <Grid item xs={4} alignSelf="stretch">
                 <Skeleton variant="rounded" height={'90%'} />
               </Grid>
             )}
-            <Grid item xs={2} sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" component="h4" sx={{ fontWeight: 300 }}>
+            <Grid item xs={4} sx={{ textAlign: 'center' }}>
+              <Typography variant="h4" component="h4" sx={{ fontWeight: 250 }}>
                 OR
               </Typography>
             </Grid>
             {!loading && member2.id ? (
               <MemberImage src={member2.picture} name={member2.name} onClick={() => handlePick(0, 2)} />
             ) : (
-              <Grid item xs={5} alignSelf="stretch">
+              <Grid item xs={4} alignSelf="stretch">
                 <Skeleton variant="rounded" height={'90%'} />
               </Grid>
             )}
@@ -157,7 +172,7 @@ export default function Sort() {
               sx={{
                 width: '100%',
                 fontSize: '1.6rem',
-                paddingY: '1.6rem',
+                paddingY: '1rem',
                 borderRadius: '3.6rem',
               }}
               onClick={() => handlePick(1, 1)}
@@ -173,7 +188,7 @@ export default function Sort() {
                 sx={{
                   width: '100%',
                   fontSize: '1.6rem',
-                  paddingY: '1.6rem',
+                  paddingY: '1rem',
                   borderRadius: '3.6rem',
                 }}
                 onClick={() => handleUndo()}
@@ -185,13 +200,13 @@ export default function Sort() {
         </Grid>
       </Box>
       <Box sx={{ width: '100%' }} mt={6}>
-        <Typography variant="h5" component="h5" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>
+        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>
           Sort Progress
         </Typography>
         <LinearProgressWithLabel value={sortProgress} />
       </Box>
       <Box sx={{ width: '100%' }} mt={3}>
-        <Typography variant="h5" component="h5" sx={{ fontWeight: 700, textTransform: 'uppercase' }} mb={1}>
+        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }} mb={1}>
           Filters
         </Typography>
         <Box
@@ -209,14 +224,14 @@ export default function Sort() {
           <Chip
             label={statusOptions[memberStatus - 1].label}
             color="primary"
-            sx={{ fontWeight: 600, fontSize: '1.6rem' }}
+            sx={{ fontWeight: 600, fontSize: '1.2rem' }}
           />
           {generations.split('|').map((generation, index) => (
             <Chip
               key={index}
               label={generationOptionsConst[Number(generation) - 1].label}
               color="primary"
-              sx={{ fontWeight: 600, fontSize: '1.6rem' }}
+              sx={{ fontWeight: 600, fontSize: '1.2rem' }}
             />
           ))}
         </Box>
