@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useTheme } from '@mui/material';
 import Image from 'next/image';
 import { Wrapper } from './style';
@@ -19,7 +19,7 @@ const MemberImage = ({ src, name, onClick }) => {
         }}
         onClick={onClick}
       >
-        <Image priority src={src} alt={name} layout="fill" objectFit="contain" />
+        <Image priority blurDataURL='/assets/blurImage.jpg' placeholder='blur' src={src} alt={name} layout="fill" objectFit="contain" />
       </Paper>
       <Typography
         variant="h5"
