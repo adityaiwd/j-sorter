@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -9,13 +9,16 @@ import useJMSStore from '../hooks';
 import { bulkAddFilteredMembers, SortResult } from '../src/db';
 import { filteredMembers } from '../src/queries';
 import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies()
 
 export default function Index() {
   const router = useRouter();
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const [createFilters, setCurrentMatchId] = useJMSStore(state => [state.createFilters, state.setCurrentMatchId], shallow);
+  const [createFilters, setCurrentMatchId, version] = useJMSStore(state => [state.createFilters, state.setCurrentMatchId, state.version], shallow);
   const [memberStatus, setMemberStatus] = useState('');
   const [generations, setGenerations] = useState([]);
   const handleChange = event => {
@@ -76,6 +79,15 @@ export default function Index() {
     bulkAddFilteredMembers(filteredMembers(memberStatus, generations));
     router.push('/sort');
   };
+
+  useEffect(() => {
+    if(version !== 1){
+      cookies.set('version', 1, { path: '/' })
+      indexedDB.deleteDatabase('SortResult');
+      router.reload(window.location.pathname)
+    }
+  },[version, router])
+
   return (
     <Container maxWidth="sm">
       <Box component="div" mt={6}>
