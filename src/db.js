@@ -47,7 +47,6 @@ export const updateMemberScore = async (matchId, member1, member2, increaseNumbe
 
 export const undoLastPick = async id => {
   const lastPicked = await getMatchById(id);
-  await SortResult.history.where('id').equals(id).delete();
   const home = await SortResult.members.get(lastPicked.home.id);
   const away = await SortResult.members.get(lastPicked.away.id);
   await SortResult.members.update(home.id, {
