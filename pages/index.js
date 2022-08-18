@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import shallow from 'zustand/shallow';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Container, Typography, MenuItem, TextField, Box, FormControl, Switch, Select, Chip } from '@mui/material';
 import { statusOptions, generationOptionsConst, MenuProps } from '../constants';
@@ -8,14 +9,16 @@ import useJMSStore from '../hooks';
 import { bulkAddFilteredMembers, SortResult } from '../src/db';
 import { filteredMembers } from '../src/queries';
 import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 
 export default function Index() {
   const router = useRouter();
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const createFilters = useJMSStore(state => state.createFilters);
+  const [createFilters, setCurrentMatchId] = useJMSStore(state => [state.createFilters, state.setCurrentMatchId], shallow);
   const [memberStatus, setMemberStatus] = useState('');
   const [generations, setGenerations] = useState([]);
   const handleChange = event => {
@@ -70,6 +73,8 @@ export default function Index() {
     if (members.length > 0) {
       SortResult.members.clear();
       SortResult.history.clear();
+      SortResult.matches.clear();
+      setCurrentMatchId(1)
     }
     createFilters(memberStatus, generations.join('|'));
     bulkAddFilteredMembers(filteredMembers(memberStatus, generations));

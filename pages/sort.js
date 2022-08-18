@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTheme } from '@mui/material';
 import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import { statusOptions, generationOptionsConst } from '../constants';
 import useJMSStore from '../hooks';
 import MemberImage from '../components/MemberImage';
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
-import { SortResult, updateMemberScore, undoLastPick } from '../src/db';
+import { SortResult, updateMemberScore, undoLastPick, getMatchById, getMemberById } from '../src/db';
 import MSButton from '../components/MSButton';
 
 function product_Range(a, b) {
@@ -30,12 +30,6 @@ function combinations(n, r) {
   }
 }
 
-function getMultipleRandom(arr, num) {
-  const shuffled = [...arr].sort(() => 0.5 - Math.random());
-
-  return shuffled.slice(0, num);
-}
-
 const memberProps = {
   id: 0,
   picture: '',
@@ -49,37 +43,27 @@ const memberProps = {
 export default function Sort() {
   const router = useRouter();
   const theme = useTheme();
-  const [memberStatus, generations] = useJMSStore(state => [state.memberStatus, state.generations], shallow);
+  const [memberStatus, generations, currentMatchId, setCurrentMatchId] = useJMSStore(
+    state => [state.memberStatus, state.generations, state.currentMatchId, state.setCurrentMatchId],
+    shallow,
+  );
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const history = useLiveQuery(async () => {
-    return await SortResult.history.toArray();
+  const matches = useLiveQuery(async () => {
+    return await SortResult.matches.toArray();
   });
-  const [matchCounter, setMatchCounter] = useState(0);
   const sortProgress = useMemo(() => {
-    if (members && history) {
-      return Math.ceil((history.length / combinations(members.length, 2)) * 100);
+    if (members) {
+      return Math.ceil(((currentMatchId - 1) / combinations(members.length, 2)) * 100);
     }
     return 0;
-  }, [members, history]);
+  }, [members, currentMatchId]);
 
   const [member1, setMember1] = useState(memberProps);
   const [member2, setMember2] = useState(memberProps);
   const [loading, setLoading] = useState(false);
   const [undoCalled, setUndoCalled] = useState(false);
-  const matchChecker = useCallback(() => {
-    if (sortProgress === 100 || undoCalled) {
-      return;
-    }
-    const match = getMultipleRandom(members, 2);
-    if (!match[0].matched.includes(match[1].id) && !match[1].matched.includes(match[0].id)) {
-      setMember1(match[0]);
-      setMember2(match[1]);
-    } else {
-      matchChecker();
-    }
-  }, [sortProgress, members, undoCalled]);
 
   const handlePick = (member1Score, member2Score) => {
     setLoading(true);
@@ -89,36 +73,43 @@ export default function Sort() {
     if (undoCalled) {
       setUndoCalled(false);
     }
-    updateMemberScore(member1, member2, member1Score, member2Score);
-    setMatchCounter(matchCounter + 1);
+    updateMemberScore(currentMatchId, member1, member2, member1Score, member2Score);
+    setCurrentMatchId(currentMatchId + 1);
   };
 
   const handleUndo = async () => {
     setUndoCalled(true);
-    setMatchCounter(matchCounter - 1);
-    const { newHome, newAway } = await undoLastPick();
+    const { newHome, newAway } = await undoLastPick(currentMatchId - 1);
     setMember1(newHome);
     setMember2(newAway);
+    setCurrentMatchId(currentMatchId - 1);
   };
 
   useEffect(() => {
-    setLoading(true);
     if (sortProgress === 100) {
       return;
     }
-    if (history && members) {
-      if (matchCounter === combinations(members.length, 2)) {
+    if (members && matches) {
+      if (currentMatchId === matches.length + 1) {
         return;
       }
-      if (matchCounter === 0) {
-        setMatchCounter(history.length);
-      }
-      matchChecker();
+      const fetchMatch = async () => {
+        setLoading(true);
+        if (undoCalled) {
+          return;
+        }
+        const match = await getMatchById(currentMatchId);
+        const member1 = await getMemberById(match.home.id);
+        const member2 = await getMemberById(match.away.id);
+        setMember1(member1);
+        setMember2(member2);
+      };
+      fetchMatch();
+      setLoading(false);
     }
-    setLoading(false);
-  }, [members, router, matchCounter, history, sortProgress, matchChecker]);
+  }, [members, matches, sortProgress, currentMatchId, undoCalled]);
 
-  if (!members || !history) {
+  if (!members || !matches) {
     return null;
   }
 
@@ -181,7 +172,7 @@ export default function Sort() {
               TIE!
             </Button>
           </Grid>
-          {matchCounter === 0 || history.length === 0 ? null : (
+          {currentMatchId === 1 ? null : (
             <Grid item xs={12}>
               <Button
                 variant="contained"
