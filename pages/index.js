@@ -9,9 +9,6 @@ import useJMSStore from '../hooks';
 import { bulkAddFilteredMembers, SortResult } from '../src/db';
 import { filteredMembers } from '../src/queries';
 import { toast } from 'react-toastify';
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies();
 
 export default function Index() {
   const router = useRouter();
@@ -72,7 +69,6 @@ export default function Index() {
     }
     if (members.length > 0) {
       SortResult.members.clear();
-      SortResult.history.clear();
       SortResult.matches.clear();
       setCurrentMatchId(1)
     }
