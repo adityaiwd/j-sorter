@@ -19,7 +19,7 @@ const MemberImage = ({ src, name, onClick }) => {
         }}
         onClick={onClick}
       >
-        <Image priority blurDataURL='/assets/blurImage.jpg' placeholder='blur' src={src} alt={name} layout="fill" objectFit="contain" />
+        <Image blurDataURL='/assets/blurImage.jpg' placeholder='blur' src={src} alt={name} layout="fill" objectFit="contain" />
       </Paper>
       <Typography
         variant="h5"
