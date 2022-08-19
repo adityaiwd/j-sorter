@@ -10,6 +10,7 @@ import MemberImage from '../components/MemberImage';
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
 import { SortResult, updateMemberScore, undoLastPick, getMatchById, getMemberById } from '../src/db';
 import MSButton from '../components/MSButton';
+import Loader from '../components/Loader'
 
 function product_Range(a, b) {
   var prd = a,
@@ -110,7 +111,7 @@ export default function Sort() {
   }, [members, matches, sortProgress, currentMatchId, undoCalled]);
 
   if (!members || !matches) {
-    return null;
+    return <Loader />;
   }
 
   return (

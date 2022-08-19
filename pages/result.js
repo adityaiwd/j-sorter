@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useTheme } from '@mui/material/styles';
 import {
-  Grid,
   Container,
   Typography,
-  MenuItem,
-  TextField,
   Box,
-  FormControl,
-  Switch,
-  Select,
-  Chip,
-  Button,
   Paper,
   Table,
   TableBody,
