@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -11,16 +11,20 @@ import { filteredMembers } from '../src/queries';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 
-const cookies = new Cookies()
+const cookies = new Cookies();
 
 export default function Index() {
   const router = useRouter();
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const [createFilters, setCurrentMatchId, version] = useJMSStore(state => [state.createFilters, state.setCurrentMatchId, state.version], shallow);
+  const [createFilters, setCurrentMatchId, version] = useJMSStore(
+    state => [state.createFilters, state.setCurrentMatchId, state.version],
+    shallow,
+  );
   const [memberStatus, setMemberStatus] = useState('');
   const [generations, setGenerations] = useState([]);
+  const [startLoading, setStartLoading] = useState(false);
   const handleChange = event => {
     const {
       target: { value },
@@ -53,40 +57,44 @@ export default function Index() {
     }
   };
 
-  const handleStart = () => {
+  const handleStart = useCallback(() => {
     if (filteredMembers(memberStatus, generations).length < 2) {
-      toast.error(
-        "To start sorting, you need 2 or more filtered members",
-        {
-          position: 'bottom-center',
-          autoClose: 6000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          style: { fontSize: '1.6rem', fontWeight: 600 },
-        },
-      );
+      toast.error('To start sorting, you need 2 or more filtered members', {
+        position: 'bottom-center',
+        autoClose: 6000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: { fontSize: '1.6rem', fontWeight: 600 },
+      });
+      setStartLoading(false);
+
       return;
     }
     if (members.length > 0) {
       SortResult.members.clear();
       SortResult.matches.clear();
-      setCurrentMatchId(1)
+      setCurrentMatchId(1);
     }
     createFilters(memberStatus, generations.join('|'));
     bulkAddFilteredMembers(filteredMembers(memberStatus, generations));
+    setStartLoading(false);
+
     router.push('/sort');
-  };
+  }, [createFilters, generations, memberStatus, members, router, setCurrentMatchId]);
 
   useEffect(() => {
-    if(version !== 1){
-      cookies.set('version', 1, { path: '/' })
-      indexedDB.deleteDatabase('SortResult');
-      router.reload(window.location.pathname)
+    if (startLoading) {
+      handleStart();
     }
-  },[version, router])
+    if (version !== 1) {
+      cookies.set('version', 1, { path: '/' });
+      indexedDB.deleteDatabase('SortResult');
+      router.reload(window.location.pathname);
+    }
+  }, [version, router, startLoading, handleStart]);
 
   return (
     <Container maxWidth="sm">
@@ -168,7 +176,11 @@ export default function Index() {
           <Switch checked={selectedGenerationOptions} onChange={handleAllGenerationCheck} disabled={!memberStatus} />
           <Typography sx={{ fontSize: '1.2rem', fontWeight: 600 }}>All Generation</Typography>
         </Box>
-        <MSButton disabled={generations.length === 0 || memberStatus === ''} onClick={handleStart}>
+        <MSButton
+          loading={startLoading}
+          disabled={generations.length === 0 || memberStatus === ''}
+          onClick={() => setStartLoading(true)}
+        >
           Start Sorting!
         </MSButton>
       </Box>

@@ -1,8 +1,8 @@
-import { Button } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton';
 
-const MSButton = ({ onClick, disabled, children, ...rest }) => {
+const MSButton = ({ onClick, loading, disabled, children, ...rest }) => {
    return (
-      <Button
+      <LoadingButton
          variant="contained"
          sx={{
             width: '100%',
@@ -10,12 +10,13 @@ const MSButton = ({ onClick, disabled, children, ...rest }) => {
             paddingY: '1.6rem',
             borderRadius: '3.6rem',
          }}
+         loading={loading}
          onClick={onClick}
          disabled={disabled}
          {...rest}
       >
          {children}
-      </Button>
+      </LoadingButton>
    )
 }
 
