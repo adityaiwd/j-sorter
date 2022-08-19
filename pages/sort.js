@@ -157,21 +157,23 @@ export default function Sort() {
           </Grid>
         )}
         <Grid container direction="column" spacing={2} my={2}>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              sx={{
-                width: '100%',
-                fontSize: '1.6rem',
-                paddingY: '1rem',
-                borderRadius: '3.6rem',
-              }}
-              onClick={() => handlePick(1, 1)}
-              disabled={sortProgress === 100}
-            >
-              TIE!
-            </Button>
-          </Grid>
+          {sortProgress !== 100 && (
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                sx={{
+                  width: '100%',
+                  fontSize: '1.6rem',
+                  paddingY: '1rem',
+                  borderRadius: '3.6rem',
+                }}
+                onClick={() => handlePick(1, 1)}
+                disabled={sortProgress === 100}
+              >
+                TIE!
+              </Button>
+            </Grid>
+          )}
           {currentMatchId === 1 ? null : (
             <Grid item xs={12}>
               <Button
