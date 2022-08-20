@@ -73,3 +73,16 @@ export const generationOptionsConst = [
     isActive: true,
   },
 ];
+
+export const generationCopy = gen => {
+  switch (gen) {
+    case 1:
+      return `${gen}st Generation`;
+    case 2:
+      return `${gen}nd Generation`;
+    case 3:
+      return `${gen}rd Generation`;
+    default:
+      return `${gen}th Generation`;
+  }
+};

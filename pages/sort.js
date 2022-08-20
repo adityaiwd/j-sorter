@@ -117,7 +117,7 @@ export default function Sort() {
   return (
     <Container maxWidth="sm">
       <Box>
-        <Typography variant="h3" component="h3" sx={{ fontWeight: 300 }} mb={4} textAlign="center">
+        <Typography variant="h4" component="h4" sx={{ fontWeight: 300 }} mb={2} textAlign="center">
           {sortProgress === 100 ? 'FINISHED!' : 'PICK YOUR FAVORITE MEMBER'}
         </Typography>
         {sortProgress === 100 ? (
@@ -129,30 +129,26 @@ export default function Sort() {
             spacing={1}
             sx={{
               height: 250,
-              mb: 4,
-              px: 2,
-              [theme.breakpoints.down('sm')]: {
-                height: 200,
-              },
+              mb: 6,
             }}
           >
             {!loading && member1.id ? (
-              <MemberImage src={member1.picture} name={member1.name} onClick={() => handlePick(2, 0)} />
+              <MemberImage member={member1} onClick={() => handlePick(2, 0)} />
             ) : (
-              <Grid item xs={4} alignSelf="stretch">
-                <Skeleton variant="rounded" height={'90%'} />
+              <Grid item xs={5} alignSelf="stretch">
+                <Skeleton variant="rounded" height={'100%'} />
               </Grid>
             )}
-            <Grid item xs={4} sx={{ textAlign: 'center' }}>
+            <Grid item xs={2} sx={{ textAlign: 'center' }}>
               <Typography variant="h4" component="h4" sx={{ fontWeight: 250 }}>
                 OR
               </Typography>
             </Grid>
             {!loading && member2.id ? (
-              <MemberImage src={member2.picture} name={member2.name} onClick={() => handlePick(0, 2)} />
+              <MemberImage member={member2} onClick={() => handlePick(0, 2)} />
             ) : (
-              <Grid item xs={4} alignSelf="stretch">
-                <Skeleton variant="rounded" height={'90%'} />
+              <Grid item xs={5} alignSelf="stretch">
+                <Skeleton variant="rounded" height={'100%'} />
               </Grid>
             )}
           </Grid>
@@ -193,7 +189,7 @@ export default function Sort() {
           )}
         </Grid>
       </Box>
-      <Box sx={{ width: '100%' }} mt={6}>
+      <Box sx={{ width: '100%' }} mt={4}>
         <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>
           Sort Progress
         </Typography>
