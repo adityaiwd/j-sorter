@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -6,38 +6,45 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { generationCopy, statusOptions, generationOptionsConst } from '../constants';
+import { generationCopy, statusOptions } from '../constants';
 import Avatar from '@mui/material/Avatar';
 import useJMSStore from '../hooks';
 import { Container, Typography, Box, Button, Grid, Badge, Chip } from '@mui/material';
 import { SortResult } from '../src/db';
+import Loader from '../components/Loader'
 
 export default function Index() {
   const theme = useTheme();
   const router = useRouter();
-  const [memberStatus, generations] = useJMSStore(state => [state.memberStatus, state.generations], shallow);
+  const [memberStatus, generations, currentMatchId] = useJMSStore(
+    state => [state.memberStatus, state.generations, state.currentMatchId],
+    shallow,
+  );
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const battles = useLiveQuery(async () => {
     return await SortResult.battles.toArray();
   });
-  const generationFilterCheck = useMemo(() => {
-    if (
-      (memberStatus === 1 && generations.split('|').length === 7) ||
-      ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10)
-    ) {
-      return 'All Generation';
-    }
-    return false;
-  }, [generations, memberStatus]);
+  const generationFilterCheck =
+    (memberStatus === 1 && generations.split('|').length === 7) ||
+    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10)
+      ;
   const [sortedTopThree, setSortedTopThree] = useState([]);
   const [sortedMembers, setSortedMembers] = useState([]);
+  const [status, setStatus] = useState('');
   useEffect(() => {
     if (battles) {
+      if (currentMatchId !== battles.length + 1) {
+        router.replace('/sort');
+      }
       const sorted = battles[battles.length - 1].result;
+      setStatus(statusOptions[memberStatus - 1].label)
       setSortedTopThree(sorted.slice(0, 3));
       setSortedMembers(sorted.slice(3, sorted.length));
     }
-  }, [battles, isMobileScreen]);
+  }, [battles, currentMatchId, router, isMobileScreen, memberStatus]);
+  if (!battles) {
+    return <Loader />;
+  }
   return (
     <Container maxWidth="sm">
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -54,14 +61,14 @@ export default function Index() {
         </Typography>
         <Box sx={{ flexWrap: 'wrap' }}>
           <Chip
-            label={statusOptions[memberStatus - 1].label}
+            label={status}
             color="primary"
             size="small"
             sx={{ fontWeight: 600, fontSize: '.8rem', mb: 0.5 }}
           />
           {generationFilterCheck ? (
             <Chip
-              label={generationFilterCheck}
+              label={"All Generation"}
               size="small"
               color="primary"
               sx={{ fontWeight: 600, fontSize: '.8rem', ml: 0.5, mb: 0.5 }}
@@ -69,10 +76,10 @@ export default function Index() {
           ) : (
             generations
               .split('|')
-              .map((generation, index) => (
+              .map(generation => (
                 <Chip
-                  key={index}
-                  label={generationOptionsConst[Number(generation) - 1].label}
+                  key={generation}
+                  label={`Gen ${generation}`}
                   size="small"
                   color="primary"
                   sx={{ fontWeight: 600, fontSize: '.8rem', ml: 0.5, mb: 0.5 }}

@@ -215,7 +215,7 @@ export default function Sort() {
         <LinearProgressWithLabel value={sortProgress} />
       </Box>
       <Box sx={{ width: '100%' }} mt={3}>
-        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }} mb={1}>
+        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }} >
           Filters
         </Typography>
         <Box
@@ -234,7 +234,7 @@ export default function Sort() {
             label={statusOptions[memberStatus - 1].label}
             color="primary"
             size="small"
-            sx={{ fontWeight: 600, fontSize: '1.2rem' }}
+            sx={{ fontWeight: 400, fontSize: '1.2rem' }}
           />
           {generations.split('|').map((generation, index) => (
             <Chip
@@ -242,7 +242,7 @@ export default function Sort() {
               label={generationOptionsConst[Number(generation) - 1].label}
               size="small"
               color="primary"
-              sx={{ fontWeight: 600, fontSize: '1.2rem' }}
+              sx={{ fontWeight: 400, fontSize: '1.2rem' }}
             />
           ))}
         </Box>
