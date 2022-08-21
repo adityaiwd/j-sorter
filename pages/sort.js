@@ -83,6 +83,9 @@ export default function Sort() {
       setHomeCounter(homeCounter + 1);
       setAwayCounter(awayCounter + 1);
     }
+    if (currentMatchId !== battles.length) {
+      updateParentBattle(battle);
+    }
   };
 
   const handleUndo = async () => {
@@ -103,9 +106,6 @@ export default function Sort() {
       const fetchBattle = async () => {
         const battle = battles[currentMatchId - 1];
         if (battle.home.length === homeCounter || battle.away.length === awayCounter) {
-          if (currentMatchId !== battles.length) {
-            updateParentBattle(battle);
-          }
           setCurrentMatchId(currentMatchId + 1);
           setHomeCounter(0);
           setAwayCounter(0);
