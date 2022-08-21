@@ -8,6 +8,8 @@ const useJMSStore = create((set) => ({
    generations: cookies.get('generations') || '',
    currentMatchId: Number(cookies.get('matchId')) || 1,
    version: Number(cookies.get('version')) || 0,
+   homeCounter: Number(cookies.get('homeCounter')) || 0,
+   awayCounter: Number(cookies.get('awayCounter')) || 0,
    createFilters: (memberStatus, generations) => {
       cookies.set('memberStatus', memberStatus.toString(), { path: '/' });
       cookies.set('generations', generations, { path: '/' });
@@ -17,7 +19,14 @@ const useJMSStore = create((set) => ({
       cookies.set('matchId', currentMatchId, { path: '/' });
       set({ currentMatchId })
    },
-   resetFilters: () => set({ memberStatus: 0, generations: [] }),
+   setHomeCounter: (homeCounter) => {
+      cookies.set('homeCounter', homeCounter, { path: '/' });
+      set({ homeCounter })
+   },
+   setAwayCounter: (awayCounter) => {
+      cookies.set('awayCounter', awayCounter, { path: '/' });
+      set({ awayCounter })
+   },
 }))
 
 export default useJMSStore

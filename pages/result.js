@@ -21,20 +21,20 @@ export default function Index() {
   const theme = useTheme();
   const router = useRouter()
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const members = useLiveQuery(async () => {
-    return await SortResult.members.toArray();
+  const battles = useLiveQuery(async () => {
+    return await SortResult.battles.toArray();
   });
   const [sortedTopThree, setSortedTopThree] = useState([]);
   const [sortedFourthToTen, setSortedFourthToTen] = useState([]);
   const [sortedMembers, setSortedMembers] = useState([]);
   useEffect(() => {
-    if (members) {
-      const sorted = members.sort((a, b) => b.score - a.score);
+    if (battles) {
+      const sorted = battles[battles.length-1].result;
       setSortedTopThree(sorted.slice(0, 3));
       setSortedFourthToTen(isMobileScreen ? [] : sorted.slice(3, 10));
       setSortedMembers(sorted.slice(isMobileScreen ? 3 : 10, sorted.length));
     }
-  }, [members, isMobileScreen]);
+  }, [battles, isMobileScreen]);
   return (
     <Container maxWidth="sm">
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -51,7 +51,7 @@ export default function Index() {
             sm={6}
             sx={{ pr: !isMobileScreen && 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
           >
-            {members &&
+            {battles &&
               sortedTopThree.map((data, index) => {
                 return (
                   <Box

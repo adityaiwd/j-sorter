@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useTheme } from '@mui/material';
 import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -8,28 +7,16 @@ import { statusOptions, generationOptionsConst } from '../constants';
 import useJMSStore from '../hooks';
 import MemberImage from '../components/MemberImage';
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
-import { SortResult, updateMemberScore, undoLastPick, getMatchById, getMemberById } from '../src/db';
+import {
+  SortResult,
+  undoLastPick,
+  getBattleById,
+  updateParentBattle,
+  updateBattleSorter,
+  addToHistory,
+} from '../src/db';
 import MSButton from '../components/MSButton';
-import Loader from '../components/Loader'
-
-function product_Range(a, b) {
-  var prd = a,
-    i = a;
-
-  while (i++ < b) {
-    prd *= i;
-  }
-  return prd;
-}
-
-function combinations(n, r) {
-  if (n == r || r == 0) {
-    return 1;
-  } else {
-    r = r < n - r ? n - r : r;
-    return product_Range(r + 1, n) / product_Range(1, n - r);
-  }
-}
+import Loader from '../components/Loader';
 
 const memberProps = {
   id: 0,
@@ -43,74 +30,106 @@ const memberProps = {
 
 export default function Sort() {
   const router = useRouter();
-  const theme = useTheme();
-  const [memberStatus, generations, currentMatchId, setCurrentMatchId] = useJMSStore(
-    state => [state.memberStatus, state.generations, state.currentMatchId, state.setCurrentMatchId],
+  const [
+    memberStatus,
+    generations,
+    currentMatchId,
+    setCurrentMatchId,
+    homeCounter,
+    setHomeCounter,
+    awayCounter,
+    setAwayCounter,
+  ] = useJMSStore(
+    state => [
+      state.memberStatus,
+      state.generations,
+      state.currentMatchId,
+      state.setCurrentMatchId,
+      state.homeCounter,
+      state.setHomeCounter,
+      state.awayCounter,
+      state.setAwayCounter,
+    ],
     shallow,
   );
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const matches = useLiveQuery(async () => {
-    return await SortResult.matches.toArray();
+  const battles = useLiveQuery(async () => {
+    return await SortResult.battles.toArray();
   });
   const sortProgress = useMemo(() => {
-    if (members) {
-      return Math.ceil(((currentMatchId - 1) / combinations(members.length, 2)) * 100);
+    if (battles) {
+      return Math.round((currentMatchId / (battles.length + 1)) * 100);
     }
     return 0;
-  }, [members, currentMatchId]);
+  }, [currentMatchId, battles]);
 
   const [member1, setMember1] = useState(memberProps);
   const [member2, setMember2] = useState(memberProps);
   const [loading, setLoading] = useState(false);
-  const [undoCalled, setUndoCalled] = useState(false);
 
-  const handlePick = (member1Score, member2Score) => {
+  const handlePick = async team => {
     setLoading(true);
-    if (sortProgress === 100) {
-      return;
+    addToHistory({ battleId: currentMatchId, homeIndex: homeCounter, awayIndex: awayCounter });
+    const battle = await getBattleById(currentMatchId);
+    if (team === 'home') {
+      setHomeCounter(homeCounter + 1);
+    } else if (team === 'away') {
+      updateBattleSorter(battle, member1.id, member2.id);
+      setAwayCounter(awayCounter + 1);
+    } else {
+      updateBattleSorter(battle, member1.id + 1, member2.id);
+      setHomeCounter(homeCounter + 1);
+      setAwayCounter(awayCounter + 1);
     }
-    if (undoCalled) {
-      setUndoCalled(false);
-    }
-    updateMemberScore(currentMatchId, member1, member2, member1Score, member2Score);
-    setCurrentMatchId(currentMatchId + 1);
   };
 
   const handleUndo = async () => {
-    setUndoCalled(true);
-    const { newHome, newAway } = await undoLastPick(currentMatchId - 1);
-    setMember1(newHome);
-    setMember2(newAway);
-    setCurrentMatchId(currentMatchId - 1);
+    const { lastBattleId, lastPickedHome, lastPickedAway } = await undoLastPick();
+    setCurrentMatchId(lastBattleId);
+    setHomeCounter(lastPickedHome);
+    setAwayCounter(lastPickedAway);
   };
 
   useEffect(() => {
     if (sortProgress === 100) {
       return;
     }
-    if (members && matches) {
-      if (currentMatchId === matches.length + 1) {
+    if (members && battles) {
+      if (currentMatchId === battles.length + 1) {
         return;
       }
-      const fetchMatch = async () => {
-        setLoading(true);
-        if (undoCalled) {
-          return;
+      const fetchBattle = async () => {
+        const battle = battles[currentMatchId - 1];
+        if (battle.home.length === homeCounter || battle.away.length === awayCounter) {
+          if (currentMatchId !== battles.length) {
+            updateParentBattle(battle);
+          }
+          setCurrentMatchId(currentMatchId + 1);
+          setHomeCounter(0);
+          setAwayCounter(0);
+        } else {
+          setMember1(battle.home[homeCounter]);
+          setMember2(battle.away[awayCounter]);
         }
-        const match = await getMatchById(currentMatchId);
-        const member1 = await getMemberById(match.home.id);
-        const member2 = await getMemberById(match.away.id);
-        setMember1(member1);
-        setMember2(member2);
       };
-      fetchMatch();
+      fetchBattle();
       setLoading(false);
     }
-  }, [members, matches, sortProgress, currentMatchId, undoCalled]);
+  }, [
+    members,
+    battles,
+    sortProgress,
+    currentMatchId,
+    homeCounter,
+    awayCounter,
+    setCurrentMatchId,
+    setHomeCounter,
+    setAwayCounter,
+  ]);
 
-  if (!members || !matches) {
+  if (!members || !battles) {
     return <Loader />;
   }
 
@@ -133,7 +152,7 @@ export default function Sort() {
             }}
           >
             {!loading && member1.id ? (
-              <MemberImage member={member1} onClick={() => handlePick(2, 0)} />
+              <MemberImage member={member1} onClick={() => handlePick('home')} />
             ) : (
               <Grid item xs={5} alignSelf="stretch">
                 <Skeleton variant="rounded" height={'100%'} />
@@ -145,7 +164,7 @@ export default function Sort() {
               </Typography>
             </Grid>
             {!loading && member2.id ? (
-              <MemberImage member={member2} onClick={() => handlePick(0, 2)} />
+              <MemberImage member={member2} onClick={() => handlePick('away')} />
             ) : (
               <Grid item xs={5} alignSelf="stretch">
                 <Skeleton variant="rounded" height={'100%'} />
@@ -164,7 +183,7 @@ export default function Sort() {
                   paddingY: '1rem',
                   borderRadius: '3.6rem',
                 }}
-                onClick={() => handlePick(1, 1)}
+                onClick={() => handlePick('tie')}
                 disabled={sortProgress === 100}
               >
                 TIE!
@@ -214,12 +233,14 @@ export default function Sort() {
           <Chip
             label={statusOptions[memberStatus - 1].label}
             color="primary"
+            size="small"
             sx={{ fontWeight: 600, fontSize: '1.2rem' }}
           />
           {generations.split('|').map((generation, index) => (
             <Chip
               key={index}
               label={generationOptionsConst[Number(generation) - 1].label}
+              size="small"
               color="primary"
               sx={{ fontWeight: 600, fontSize: '1.2rem' }}
             />

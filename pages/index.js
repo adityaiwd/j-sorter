@@ -18,8 +18,8 @@ export default function Index() {
   const members = useLiveQuery(async () => {
     return await SortResult.members.toArray();
   });
-  const [createFilters, setCurrentMatchId, version] = useJMSStore(
-    state => [state.createFilters, state.setCurrentMatchId, state.version],
+  const [createFilters, setCurrentMatchId,setHomeCounter, setAwayCounter, version] = useJMSStore(
+    state => [state.createFilters, state.setCurrentMatchId, state.setHomeCounter, state.setAwayCounter, state.version],
     shallow,
   );
   const [memberStatus, setMemberStatus] = useState('');
@@ -75,22 +75,25 @@ export default function Index() {
     }
     if (members.length > 0) {
       SortResult.members.clear();
-      SortResult.matches.clear();
+      SortResult.battles.clear();
+      SortResult.history.clear();
       setCurrentMatchId(1);
+      setHomeCounter(0);
+      setAwayCounter(0);
     }
     createFilters(memberStatus, generations.join('|'));
     bulkAddFilteredMembers(filteredMembers(memberStatus, generations));
     setStartLoading(false);
 
     router.push('/sort');
-  }, [createFilters, generations, memberStatus, members, router, setCurrentMatchId]);
+  }, [createFilters, generations, memberStatus, members, router, setAwayCounter, setCurrentMatchId, setHomeCounter]);
 
   useEffect(() => {
     if (startLoading) {
       handleStart();
     }
-    if (version !== 1) {
-      cookies.set('version', 1, { path: '/' });
+    if (version !== 1.1) {
+      cookies.set('version', 1.1, { path: '/' });
       indexedDB.deleteDatabase('SortResult');
       router.reload(window.location.pathname);
     }
@@ -156,6 +159,7 @@ export default function Index() {
                     key={value}
                     label={generationOptionsConst[value - 1].label}
                     color="primary"
+                    size="small"
                     sx={{ fontWeight: 500, fontSize: '1.2rem' }}
                   />
                 ))}

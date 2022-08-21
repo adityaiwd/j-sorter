@@ -3,8 +3,9 @@ import Dexie from 'dexie';
 export const SortResult = new Dexie('SortResult');
 
 SortResult.version(1).stores({
-  members: 'id, name, picture, generation, graduated, score',
-  matches: 'id, home, away, homeScore, awayScore',
+  members: 'id, name, picture, generation, graduated',
+  history: '++id, battleId, homeIndex, awayIndex',
+  battles: 'id, home, away, parentId, tempId, result, status',
 });
 
 export const selectedMembers = async () => await SortResult.members.toArray();
@@ -16,14 +17,62 @@ function shuffle(array) {
   }
 }
 
+function array_move(arr, old_index, new_index) {
+  if (new_index >= arr.length) {
+    var k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr; // for testing
+}
+
+export const addToHistory = async battle => {
+  await SortResult.history.add(battle);
+};
+
 export const bulkAddFilteredMembers = async members => {
-  const membersWithId = members.map((member, index) => ({ ...member, id: index + 1, score: 0 }));
-  const matches = membersWithId.flatMap((home, i) =>
-    membersWithId.slice(i + 1).map(away => ({ home, away, homeScore: 0, awayScore: 0 })),
-  );
-  shuffle(matches);
-  const matchesWithId = matches.map((match, index) => ({ ...match, id: index + 1 }));
-  await SortResult.matches.bulkAdd(matchesWithId);
+  shuffle(members)
+  const membersWithId = members.map((member, index) => ({ ...member, id: index + 1}));
+  const midMember = Math.ceil(membersWithId.length / 2);
+  let battles = [
+    {
+      tempId: 0,
+      parentId: 0,
+      status: 'home',
+      home: membersWithId.slice(0, midMember),
+      away: membersWithId.slice(midMember, membersWithId.length),
+      result: membersWithId,
+    },
+  ];
+  for (let i = 1; i < battles.length + 1; i++) {
+    const parent = battles[i - 1];
+    if (parent.home.length > 1) {
+      const midpoint = Math.ceil(parent.home.length / 2);
+      battles.push({
+        tempId: parent.tempId + i,
+        status: 'home',
+        home: parent.home.slice(0, midpoint),
+        away: parent.home.slice(midpoint, parent.home.length),
+        result: parent.home,
+        parentId: parent.tempId,
+      });
+    }
+    if (parent.away.length > 1) {
+      const midpoint = Math.ceil(parent.away.length / 2);
+      battles.push({
+        tempId: parent.tempId + i + 1,
+        status: 'away',
+        home: parent.away.slice(0, midpoint),
+        away: parent.away.slice(midpoint, parent.away.length),
+        result: parent.away,
+        parentId: parent.tempId,
+      });
+    }
+  }
+  const battlesWithResult = battles.reverse().map((battle, index) => ({ ...battle, id: index + 1 }));
+  await SortResult.battles.bulkAdd(battlesWithResult);
   await SortResult.members.bulkAdd(membersWithId);
 };
 
@@ -31,31 +80,40 @@ export const getMatchById = async id => {
   return await SortResult.matches.get(id);
 };
 
+export const getBattleById = async id => {
+  return await SortResult.battles.get(id);
+};
+
+export const getParentBattle = async id => {
+  return await SortResult.battles.get({ tempId: id });
+};
+
 export const getMemberById = async id => {
   return await SortResult.members.get(id);
 };
 
-export const updateMemberScore = async (matchId, member1, member2, increaseNumber1, increaseNumber2) => {
-  await SortResult.members.update(member1.id, {
-    score: member1.score + increaseNumber1,
-  });
-  await SortResult.members.update(member2.id, {
-    score: member2.score + increaseNumber2,
-  });
-  await SortResult.matches.update(matchId, { homeScore: increaseNumber1, awayScore: increaseNumber2 });
+export const undoLastPick = async () => {
+  const history = await SortResult.history.toArray();
+  const lastPicked = history[history.length - 1];
+  await SortResult.history.where('id').equals(lastPicked.id).delete();
+  const battle = await getBattleById(lastPicked.battleId)
+  const lastPickedHome = lastPicked.homeIndex;
+  const lastPickedAway = lastPicked.awayIndex;
+
+  return { lastBattleId:battle.id, lastPickedHome, lastPickedAway };
 };
 
-export const undoLastPick = async id => {
-  const lastPicked = await getMatchById(id);
-  const home = await SortResult.members.get(lastPicked.home.id);
-  const away = await SortResult.members.get(lastPicked.away.id);
-  await SortResult.members.update(home.id, {
-    score: home.score - lastPicked.homeScore,
-  });
-  await SortResult.members.update(away.id, {
-    score: away.score - lastPicked.awayScore,
-  });
-  await SortResult.matches.update(id, { homeScore: 0, awayScore: 0 });
+export const updateBattleSorter = async (battle, homeBattleId, awayBattleId) => {
+  const homeIndex = battle.result.findIndex(el => el.id === homeBattleId);
+  const awayIndex = battle.result.findIndex(el => el.id === awayBattleId);
+  await SortResult.battles.update(battle.id, { result: array_move(battle.result, awayIndex, homeIndex) });
+};
 
-  return { newHome: lastPicked.home, newAway: lastPicked.away };
+export const updateParentBattle = async battle => {
+  const parent = await getParentBattle(battle.parentId);
+  if (battle.status === 'home') {
+    await SortResult.battles.update(parent.id, { home: battle.result, result: [...battle.result, ...parent.away] });
+  } else {
+    await SortResult.battles.update(parent.id, { away: battle.result, result: [...parent.home, ...battle.result] });
+  }
 };
