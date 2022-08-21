@@ -64,7 +64,9 @@ export default function Sort() {
     }
     return 0;
   }, [currentMatchId, battles]);
-
+  const generationFilterCheck =
+  (memberStatus === 1 && generations.split('|').length === 7) ||
+  ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
   const [member1, setMember1] = useState(memberProps);
   const [member2, setMember2] = useState(memberProps);
   const [loading, setLoading] = useState(false);
@@ -236,7 +238,14 @@ export default function Sort() {
             size="small"
             sx={{ fontWeight: 400, fontSize: '1.2rem' }}
           />
-          {generations.split('|').map((generation, index) => (
+          {generationFilterCheck ? (
+            <Chip
+              label={"All Generation"}
+              size="small"
+              color="primary"
+              sx={{ fontWeight: 400, fontSize: '1.2rem'}}
+            />
+          ) : (generations.split('|').map((generation, index) => (
             <Chip
               key={index}
               label={generationOptionsConst[Number(generation) - 1].label}
@@ -244,7 +253,7 @@ export default function Sort() {
               color="primary"
               sx={{ fontWeight: 400, fontSize: '1.2rem' }}
             />
-          ))}
+          )))}
         </Box>
       </Box>
     </Container>

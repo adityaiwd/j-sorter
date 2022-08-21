@@ -26,8 +26,7 @@ export default function Index() {
   });
   const generationFilterCheck =
     (memberStatus === 1 && generations.split('|').length === 7) ||
-    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10)
-      ;
+    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
   const [sortedTopThree, setSortedTopThree] = useState([]);
   const [sortedMembers, setSortedMembers] = useState([]);
   const [status, setStatus] = useState('');
@@ -64,14 +63,14 @@ export default function Index() {
             label={status}
             color="primary"
             size="small"
-            sx={{ fontWeight: 600, fontSize: '.8rem', mb: 0.5 }}
+            sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 0.5 }}
           />
           {generationFilterCheck ? (
             <Chip
               label={"All Generation"}
               size="small"
               color="primary"
-              sx={{ fontWeight: 600, fontSize: '.8rem', ml: 0.5, mb: 0.5 }}
+              sx={{ fontWeight: 400, fontSize: '1.2rem', ml: 0.5, mb: 0.5 }}
             />
           ) : (
             generations
@@ -82,7 +81,7 @@ export default function Index() {
                   label={`Gen ${generation}`}
                   size="small"
                   color="primary"
-                  sx={{ fontWeight: 600, fontSize: '.8rem', ml: 0.5, mb: 0.5 }}
+                  sx={{ fontWeight: 400, fontSize: '1.2rem', ml: 0.5, mb: 0.5 }}
                 />
               ))
           )}
