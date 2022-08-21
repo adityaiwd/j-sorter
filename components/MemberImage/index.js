@@ -41,7 +41,7 @@ const MemberImage = ({ member, onClick }) => {
               {name}
             </Typography>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="subtitle1" color="text.secondary" sx={{ fontSize: '1rem' }}>
+              <Typography variant="subtitle1" color="text.secondary" sx={{ fontSize: '1.2rem' }}>
                 {generationCopy(generation)}
               </Typography>
               <ActiveChip graduated={graduated} />

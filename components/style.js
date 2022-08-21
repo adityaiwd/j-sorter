@@ -54,7 +54,7 @@ export const Main = styled.main`
    margin: 0 auto;
    width: 100%;
    min-height: 100vh;
-   padding-top: 12rem;
+   padding-top: 10rem;
 `
 
 export const FooterDivider = styled.div`
