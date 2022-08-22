@@ -1,13 +1,6 @@
 <a name="readme-top"></a>
 
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -15,8 +8,6 @@
   <a href="https://github.com/adityaiwd/j-sorter">
     <img src="public/logo.png" alt="Logo" width="168" height="36">
   </a>
-
-  <h3 align="center">JKT48 Member Sorter</h3>
 
   <p align="center">
     A fanmade JKT48 website to sort your favorite JKT48 members
@@ -163,16 +154,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/adityaiwd/j-sorter.svg?style=for-the-badge
-[contributors-url]: https://github.com/adityaiwd/j-sorter/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/adityaiwd/j-sorter.svg?style=for-the-badge
-[forks-url]: https://github.com/adityaiwd/j-sorter/network/members
-[stars-shield]: https://img.shields.io/github/stars/adityaiwd/j-sorter.svg?style=for-the-badge
-[stars-url]: https://github.com/adityaiwd/j-sorter/stargazers
-[issues-shield]: https://img.shields.io/github/issues/adityaiwd/j-sorter.svg?style=for-the-badge
-[issues-url]: https://github.com/adityaiwd/j-sorter/issues
-[license-shield]: https://img.shields.io/github/license/adityaiwd/j-sorter.svg?style=for-the-badge
-[license-url]: https://github.com/adityaiwd/j-sorter/blob/master/LICENSE.txt
 [product-screenshot]: https://user-images.githubusercontent.com/49396531/185952123-1fba0fbe-df85-49ff-a0ea-13ae28871c30.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
