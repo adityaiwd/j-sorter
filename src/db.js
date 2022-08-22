@@ -2,13 +2,10 @@ import Dexie from 'dexie';
 
 export const SortResult = new Dexie('SortResult');
 
-SortResult.version(1).stores({
-  members: 'id, name, picture, generation, graduated',
+SortResult.version(2).stores({
   history: '++id, battleId, homeIndex, awayIndex',
   battles: 'id, home, away, parentId, tempId, result, status',
 });
-
-export const selectedMembers = async () => await SortResult.members.toArray();
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -71,13 +68,8 @@ export const bulkAddFilteredMembers = async members => {
       });
     }
   }
-  const battlesWithResult = battles.reverse().map((battle, index) => ({ ...battle, id: index + 1 }));
-  await SortResult.battles.bulkAdd(battlesWithResult);
-  await SortResult.members.bulkAdd(membersWithId);
-};
-
-export const getMatchById = async id => {
-  return await SortResult.matches.get(id);
+  const battlesWithId = battles.reverse().map((battle, index) => ({ ...battle, id: index + 1 }));
+  await SortResult.battles.bulkAdd(battlesWithId);
 };
 
 export const getBattleById = async id => {
@@ -86,10 +78,6 @@ export const getBattleById = async id => {
 
 export const getParentBattle = async id => {
   return await SortResult.battles.get({ tempId: id });
-};
-
-export const getMemberById = async id => {
-  return await SortResult.members.get(id);
 };
 
 export const undoLastPick = async () => {

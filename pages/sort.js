@@ -52,9 +52,6 @@ export default function Sort() {
     ],
     shallow,
   );
-  const members = useLiveQuery(async () => {
-    return await SortResult.members.toArray();
-  });
   const battles = useLiveQuery(async () => {
     return await SortResult.battles.toArray();
   });
@@ -101,7 +98,7 @@ export default function Sort() {
     if (sortProgress === 100) {
       return;
     }
-    if (members && battles) {
+    if (battles) {
       if (currentMatchId === battles.length + 1) {
         return;
       }
@@ -120,7 +117,6 @@ export default function Sort() {
       setLoading(false);
     }
   }, [
-    members,
     battles,
     sortProgress,
     currentMatchId,
@@ -131,7 +127,7 @@ export default function Sort() {
     setAwayCounter,
   ]);
 
-  if (!members || !battles) {
+  if (!battles) {
     return <Loader />;
   }
 
