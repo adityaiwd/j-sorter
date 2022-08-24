@@ -42,6 +42,7 @@ export default function MyApp(props) {
           name="twitter:description"
           content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
         />
+        <meta name="twitter:image" content="https://jkt48membersorter.vercel.app/logo2.png" />
         <meta
           name="description"
           content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
