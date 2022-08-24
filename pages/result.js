@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import useJMSStore from '../hooks';
 import { Container, Typography, Box, Button, Grid, Badge, Chip } from '@mui/material';
 import { SortResult } from '../src/db';
-import Loader from '../components/Loader'
+import Loader from '../components/Loader';
 
 export default function Index() {
   const theme = useTheme();
@@ -31,12 +31,15 @@ export default function Index() {
   const [sortedMembers, setSortedMembers] = useState([]);
   const [status, setStatus] = useState('');
   useEffect(() => {
+    if (currentMatchId === 0) {
+      router.replace('/');
+    }
     if (battles) {
       if (currentMatchId !== battles.length + 1) {
         router.replace('/sort');
       }
       const sorted = battles[battles.length - 1].result;
-      setStatus(statusOptions[memberStatus - 1].label)
+      setStatus(statusOptions[memberStatus - 1].label);
       setSortedTopThree(sorted.slice(0, 3));
       setSortedMembers(sorted.slice(3, sorted.length));
     }
@@ -59,15 +62,10 @@ export default function Index() {
           filters :
         </Typography>
         <Box sx={{ flexWrap: 'wrap' }}>
-          <Chip
-            label={status}
-            color="primary"
-            size="small"
-            sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 0.5 }}
-          />
+          <Chip label={status} color="primary" size="small" sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 0.5 }} />
           {generationFilterCheck ? (
             <Chip
-              label={"All Generation"}
+              label={'All Generation'}
               size="small"
               color="primary"
               sx={{ fontWeight: 400, fontSize: '1.2rem', ml: 0.5, mb: 0.5 }}
