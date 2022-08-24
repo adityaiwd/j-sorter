@@ -3,7 +3,7 @@ import '../styles/global.css';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -36,6 +36,12 @@ export default function MyApp(props) {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>JKT48 Member Sorter</title>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="JKT48 Member Sorter" />
+        <meta
+          name="twitter:description"
+          content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
+        />
         <meta
           name="description"
           content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
@@ -48,6 +54,7 @@ export default function MyApp(props) {
         <meta property="og:url" content="https://jkt48membersorter.vercel.app" />
         <meta property="og:type" content="website" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider theme={theme}>
