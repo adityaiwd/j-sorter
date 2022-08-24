@@ -31,7 +31,7 @@ export default function Index() {
   const [sortedMembers, setSortedMembers] = useState([]);
   const [status, setStatus] = useState('');
   useEffect(() => {
-    if (currentMatchId === 0) {
+    if (memberStatus === 0) {
       router.replace('/');
     }
     if (battles) {

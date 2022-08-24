@@ -6,7 +6,7 @@ const cookies = new Cookies();
 const useJMSStore = create((set) => ({
    memberStatus: Number(cookies.get('memberStatus')) || 0,
    generations: cookies.get('generations') || '',
-   currentMatchId: Number(cookies.get('matchId')) || 0,
+   currentMatchId: Number(cookies.get('matchId')) || 1,
    homeCounter: Number(cookies.get('homeCounter')) || 0,
    awayCounter: Number(cookies.get('awayCounter')) || 0,
    createFilters: (memberStatus, generations) => {
