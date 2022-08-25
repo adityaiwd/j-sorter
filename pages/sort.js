@@ -62,8 +62,8 @@ export default function Sort() {
     return 0;
   }, [currentMatchId, battles]);
   const generationFilterCheck =
-  (memberStatus === 1 && generations.split('|').length === 7) ||
-  ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
+    (memberStatus === 1 && generations.split('|').length === 7) ||
+    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
   const [member1, setMember1] = useState(memberProps);
   const [member2, setMember2] = useState(memberProps);
   const [loading, setLoading] = useState(false);
@@ -72,14 +72,12 @@ export default function Sort() {
     setLoading(true);
     addToHistory({ battleId: currentMatchId, homeIndex: homeCounter, awayIndex: awayCounter });
     const battle = await getBattleById(currentMatchId);
+    updateBattleSorter(battle, member1.id, member2.id, team);
     if (team === 'home') {
-      updateBattleSorter(battle, member1.id, member2.id, true);
       setHomeCounter(homeCounter + 1);
     } else if (team === 'away') {
-      updateBattleSorter(battle, member1.id, member2.id);
       setAwayCounter(awayCounter + 1);
     } else {
-      updateBattleSorter(battle, member1.id + 1, member2.id);
       setHomeCounter(homeCounter + 1);
       setAwayCounter(awayCounter + 1);
     }
@@ -214,7 +212,7 @@ export default function Sort() {
         <LinearProgressWithLabel value={sortProgress} />
       </Box>
       <Box sx={{ width: '100%' }} mt={3}>
-        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }} >
+        <Typography variant="h6" component="h6" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>
           Filters
         </Typography>
         <Box
@@ -236,21 +234,20 @@ export default function Sort() {
             sx={{ fontWeight: 400, fontSize: '1.2rem' }}
           />
           {generationFilterCheck ? (
-            <Chip
-              label={"All Generation"}
-              size="small"
-              color="primary"
-              sx={{ fontWeight: 400, fontSize: '1.2rem'}}
-            />
-          ) : (generations.split('|').map((generation, index) => (
-            <Chip
-              key={index}
-              label={generationOptionsConst[Number(generation) - 1].label}
-              size="small"
-              color="primary"
-              sx={{ fontWeight: 400, fontSize: '1.2rem' }}
-            />
-          )))}
+            <Chip label={'All Generation'} size="small" color="primary" sx={{ fontWeight: 400, fontSize: '1.2rem' }} />
+          ) : (
+            generations
+              .split('|')
+              .map((generation, index) => (
+                <Chip
+                  key={index}
+                  label={generationOptionsConst[Number(generation) - 1].label}
+                  size="small"
+                  color="primary"
+                  sx={{ fontWeight: 400, fontSize: '1.2rem' }}
+                />
+              ))
+          )}
         </Box>
       </Box>
     </Container>
