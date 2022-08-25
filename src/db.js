@@ -30,8 +30,8 @@ export const addToHistory = async battle => {
 };
 
 export const bulkAddFilteredMembers = async members => {
-  shuffle(members)
-  const membersWithId = members.map((member, index) => ({ ...member, id: index + 1}));
+  shuffle(members);
+  const membersWithId = members.map((member, index) => ({ ...member, id: index + 1 }));
   const midMember = Math.ceil(membersWithId.length / 2);
   let battles = [
     {
@@ -84,16 +84,22 @@ export const undoLastPick = async () => {
   const history = await SortResult.history.toArray();
   const lastPicked = history[history.length - 1];
   await SortResult.history.where('id').equals(lastPicked.id).delete();
-  const battle = await getBattleById(lastPicked.battleId)
+  const battle = await getBattleById(lastPicked.battleId);
   const lastPickedHome = lastPicked.homeIndex;
   const lastPickedAway = lastPicked.awayIndex;
 
-  return { lastBattleId:battle.id, lastPickedHome, lastPickedAway };
+  return { lastBattleId: battle.id, lastPickedHome, lastPickedAway };
 };
 
-export const updateBattleSorter = async (battle, homeBattleId, awayBattleId) => {
+export const updateBattleSorter = async (battle, homeBattleId, awayBattleId, homePicked) => {
   const homeIndex = battle.result.findIndex(el => el.id === homeBattleId);
   const awayIndex = battle.result.findIndex(el => el.id === awayBattleId);
+  console.log(homeIndex, awayIndex);
+  if (homePicked && homeIndex < awayIndex) return;
+  if (homePicked && homeIndex > awayIndex) {
+    await SortResult.battles.update(battle.id, { result: array_move(battle.result, homeIndex, awayIndex) });
+    return;
+  }
   await SortResult.battles.update(battle.id, { result: array_move(battle.result, awayIndex, homeIndex) });
 };
 

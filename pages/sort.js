@@ -73,6 +73,7 @@ export default function Sort() {
     addToHistory({ battleId: currentMatchId, homeIndex: homeCounter, awayIndex: awayCounter });
     const battle = await getBattleById(currentMatchId);
     if (team === 'home') {
+      updateBattleSorter(battle, member1.id, member2.id, true);
       setHomeCounter(homeCounter + 1);
     } else if (team === 'away') {
       updateBattleSorter(battle, member1.id, member2.id);
