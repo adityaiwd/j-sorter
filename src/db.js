@@ -93,6 +93,7 @@ export const undoLastPick = async () => {
 
 export const updateBattleSorter = async (battle, homeBattleId, awayBattleId, team) => {
   const homeIndex = battle.result.findIndex(el => el.id === homeBattleId);
+  const tieIndex = battle.result.findIndex(el => el.id === homeBattleId+1)
   const awayIndex = battle.result.findIndex(el => el.id === awayBattleId);
   if (team === 'home' && homeIndex < awayIndex) return;
   if (team === 'away' && awayIndex < homeIndex) return;
@@ -101,7 +102,7 @@ export const updateBattleSorter = async (battle, homeBattleId, awayBattleId, tea
     return;
   }
   if (team === 'tie') {
-    await SortResult.battles.update(battle.id, { result: array_move(battle.result, awayIndex, homeIndex+1) });
+    await SortResult.battles.update(battle.id, { result: array_move(battle.result, awayIndex, tieIndex) });
     return;
   }
   await SortResult.battles.update(battle.id, { result: array_move(battle.result, awayIndex, homeIndex) });
