@@ -115,7 +115,16 @@ export default function Index() {
                 >
                   <Avatar alt={data.name} src={data.picture} sx={{ width: 60, height: 60 }} />
                 </Badge>
-                <Box sx={{ ml: 2, display: 'flex', flexDirection: 'column' }}>
+                <Box
+                  sx={{
+                    ml: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   <Typography
                     noWrap
                     sx={{
@@ -123,10 +132,6 @@ export default function Index() {
                       position: 'relative',
                       fontSize: '1.6rem',
                       fontWeight: 700,
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      width: 1,
                     }}
                     color="text.primary"
                   >
