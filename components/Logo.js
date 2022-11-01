@@ -8,7 +8,7 @@ const Logo = () => {
          <NavLogoText style={{ color: theme.palette.primary }}>
             JKT48
          </NavLogoText>
-         <div>
+         <div className="notranslate">
             <NavLogoSubText>Member</NavLogoSubText>
             <NavLogoSubText>Sorter</NavLogoSubText>
          </div>
