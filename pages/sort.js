@@ -57,7 +57,7 @@ export default function Sort() {
   });
   const sortProgress = useMemo(() => {
     if (battles) {
-      return Math.round((currentMatchId / (battles.length + 1)) * 100);
+      return Math.round(((currentMatchId - 1) / battles.length) * 100);
     }
     return 0;
   }, [currentMatchId, battles]);
