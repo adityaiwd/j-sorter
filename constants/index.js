@@ -72,6 +72,11 @@ export const generationOptionsConst = [
     label: 'Gen 10',
     isActive: true,
   },
+  {
+    value: 11,
+    label: 'Gen 11',
+    isActive: true,
+  },
 ];
 
 export const generationCopy = gen => {
