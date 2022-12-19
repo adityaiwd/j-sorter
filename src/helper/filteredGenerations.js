@@ -7,9 +7,13 @@ export const checkFilteredAllGenerations = (memberStatus, generations) => {
   const activeGenerationLength = uniq(
     members.filter(member => !member.graduated).map(member => member.generation),
   ).length;
+  const graduatedGenerationLength = uniq(
+    members.filter(member => member.graduated).map(member => member.generation),
+  ).length;
 
   return (
     (memberStatus === ACTIVE_STATUS && generations.split('|').length === activeGenerationLength) ||
-    ((memberStatus === GRADUATED_STATUS || memberStatus === ALL_STATUS) && generations.split('|').length === allGenerationLength)
+    (memberStatus === GRADUATED_STATUS && generations.split('|').length === graduatedGenerationLength) ||
+    (memberStatus === ALL_STATUS && generations.split('|').length === allGenerationLength)
   );
 };
