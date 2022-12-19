@@ -1,13 +1,14 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Container, Typography, MenuItem, TextField, Box, FormControl, Switch, Select, Chip } from '@mui/material';
-import { statusOptions, generationOptionsConst, MenuProps } from '../constants';
+import { statusOptions, MenuProps } from '../constants';
 import MSButton from '../components/MSButton';
 import useJMSStore from '../hooks';
 import { bulkAddFilteredMembers, SortResult } from '../src/db';
 import { filteredMembers } from '../src/queries';
+import { getGenerationOptions } from '../src/helper/getGenerationOptions';
 import { toast } from 'react-toastify';
 
 export default function Index() {
@@ -32,23 +33,22 @@ export default function Index() {
     );
   };
 
-  const selectedGenerationOptions = useMemo(() => {
-    if (memberStatus === 1) {
-      return generations.length === generationOptionsConst.filter(generation => generation.isActive).length;
+  const handleMemberStatusChange = e => {
+    const {
+      target: { value },
+    } = e;
+    setMemberStatus(value)
+    if(generations.length > 0) {
+      setGenerations([])
     }
-    return generations.length === generationOptionsConst.length;
-  }, [memberStatus, generations]);
-
-  const generationOptions = useMemo(() => {
-    if (memberStatus === 1) {
-      return generationOptionsConst.filter(generation => generation.isActive);
+    if (generations.length === getGenerationOptions(memberStatus).length) {
+      setGenerations(getGenerationOptions(value).map(generation => generation.value));
     }
-    return generationOptionsConst;
-  }, [memberStatus]);
+  }
 
   const handleAllGenerationCheck = () => {
-    if (generations.length !== generationOptions.length) {
-      setGenerations(generationOptions.map(generation => generation.value));
+    if (generations.length !== getGenerationOptions(memberStatus).length) {
+      setGenerations(getGenerationOptions(memberStatus).map(generation => generation.value));
     } else {
       setGenerations([]);
     }
@@ -93,7 +93,7 @@ export default function Index() {
   return (
     <Container maxWidth="sm">
       <Box component="div" mt={6}>
-        <Typography variant="h3" component="h3" align="center" sx={{ fontWeight: 600 }}>
+        <Typography variant="h3" component="h3" align="center" sx={{ fontWeight: 600 }} className="notranslate">
           Welcome to JKT48 Member Sorter!
         </Typography>
         <Typography variant="h5" component="h5" align="center" sx={{ fontWeight: 400 }} mt={2}>
@@ -110,7 +110,7 @@ export default function Index() {
           variant="filled"
           label="Member Status"
           value={memberStatus}
-          onChange={e => setMemberStatus(e.target.value)}
+          onChange={handleMemberStatusChange}
           InputLabelProps={{
             style: { fontSize: '1.4rem', fontWeight: 600 },
           }}
@@ -148,7 +148,7 @@ export default function Index() {
                 {selected.map(value => (
                   <Chip
                     key={value}
-                    label={generationOptionsConst[value - 1].label}
+                    label={getGenerationOptions(0)[value - 1].label}
                     color="primary"
                     size="small"
                     sx={{ fontWeight: 500, fontSize: '1.2rem' }}
@@ -158,7 +158,7 @@ export default function Index() {
             )}
             MenuProps={MenuProps}
           >
-            {generationOptions.map(({ label, value }) => {
+            {getGenerationOptions(memberStatus).map(({ label, value }) => {
               return (
                 <MenuItem key={value} value={value} style={{ fontSize: '1.4rem' }}>
                   {label}
@@ -168,7 +168,7 @@ export default function Index() {
           </Select>
         </FormControl>
         <Box sx={{ display: 'flex', alignItems: 'center' }} mb={3}>
-          <Switch checked={selectedGenerationOptions} onChange={handleAllGenerationCheck} disabled={!memberStatus} />
+          <Switch checked={generations.length === getGenerationOptions(memberStatus).length} onChange={handleAllGenerationCheck} disabled={!memberStatus} />
           <Typography sx={{ fontSize: '1.2rem', fontWeight: 600 }}>All Generation</Typography>
         </Box>
         <MSButton

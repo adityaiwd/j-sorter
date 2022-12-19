@@ -3,7 +3,7 @@ import shallow from 'zustand/shallow';
 import { useRouter } from 'next/router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Grid, Container, Typography, Box, Button, Chip, Skeleton } from '@mui/material';
-import { statusOptions, generationOptionsConst } from '../constants';
+import { statusOptions } from '../constants';
 import useJMSStore from '../hooks';
 import MemberImage from '../components/MemberImage';
 import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
@@ -15,6 +15,8 @@ import {
   updateBattleSorter,
   addToHistory,
 } from '../src/db';
+import { checkFilteredAllGenerations } from '../src/helper/filteredGenerations';
+import { getGenerationOptions } from '../src/helper/getGenerationOptions';
 import MSButton from '../components/MSButton';
 import Loader from '../components/Loader';
 
@@ -61,9 +63,7 @@ export default function Sort() {
     }
     return 0;
   }, [currentMatchId, battles]);
-  const generationFilterCheck =
-    (memberStatus === 1 && generations.split('|').length === 7) ||
-    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
+
   const [member1, setMember1] = useState(memberProps);
   const [member2, setMember2] = useState(memberProps);
   const [loading, setLoading] = useState(false);
@@ -233,7 +233,7 @@ export default function Sort() {
             size="small"
             sx={{ fontWeight: 400, fontSize: '1.2rem' }}
           />
-          {generationFilterCheck ? (
+          {checkFilteredAllGenerations(memberStatus, generations) ? (
             <Chip label={'All Generation'} size="small" color="primary" sx={{ fontWeight: 400, fontSize: '1.2rem' }} />
           ) : (
             generations
@@ -241,7 +241,7 @@ export default function Sort() {
               .map((generation, index) => (
                 <Chip
                   key={index}
-                  label={generationOptionsConst[Number(generation) - 1].label}
+                  label={getGenerationOptions(0)[Number(generation) - 1].label}
                   size="small"
                   color="primary"
                   sx={{ fontWeight: 400, fontSize: '1.2rem' }}

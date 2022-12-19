@@ -12,6 +12,7 @@ function shuffle(array) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+  return array;
 }
 
 function array_move(arr, old_index, new_index) {
@@ -30,8 +31,8 @@ export const addToHistory = async battle => {
 };
 
 export const bulkAddFilteredMembers = async members => {
-  shuffle(members);
-  const membersWithId = members.map((member, index) => ({ ...member, id: index + 1 }));
+  const shuffledMembers = shuffle(members.map(member => member));
+  const membersWithId = shuffledMembers.map((member, index) => ({ ...member, id: index + 1 }));
   const midMember = Math.ceil(membersWithId.length / 2);
   let battles = [
     {
