@@ -12,6 +12,7 @@ import useJMSStore from '../hooks';
 import { Container, Typography, Box, Button, Grid, Badge, Chip } from '@mui/material';
 import { SortResult } from '../src/db';
 import Loader from '../components/Loader';
+import { checkFilteredAllGenerations } from '../src/helper/filteredGenerations';
 
 export default function Index() {
   const theme = useTheme();
@@ -24,9 +25,7 @@ export default function Index() {
   const battles = useLiveQuery(async () => {
     return await SortResult.battles.toArray();
   });
-  const generationFilterCheck =
-    (memberStatus === 1 && generations.split('|').length === 7) ||
-    ((memberStatus === 2 || memberStatus === 3) && generations.split('|').length === 10);
+
   const [sortedTopThree, setSortedTopThree] = useState([]);
   const [sortedMembers, setSortedMembers] = useState([]);
   const [status, setStatus] = useState('');
@@ -63,7 +62,7 @@ export default function Index() {
         </Typography>
         <Box sx={{ flexWrap: 'wrap' }}>
           <Chip label={status} color="primary" size="small" sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 0.5 }} />
-          {generationFilterCheck ? (
+          {checkFilteredAllGenerations(memberStatus,generations) ? (
             <Chip
               label={'All Generation'}
               size="small"
