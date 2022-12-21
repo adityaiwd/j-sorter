@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import '../styles/global.css';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
@@ -64,6 +65,7 @@ export default function MyApp(props) {
         <Layout>
           {pageLoading ? <Loader /> : <Component {...pageProps} />}
           <ToastContainer />
+          <Analytics />
         </Layout>
       </ThemeProvider>
     </CacheProvider>
