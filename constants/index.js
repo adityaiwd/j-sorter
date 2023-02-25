@@ -50,3 +50,9 @@ export const generationCopy = gen => {
       return `${gen}th Generation`;
   }
 };
+
+export const seoDescription =
+  'Cari cara yang menyenangkan dan interaktif untuk menyusun daftar member JKT48 favoritmu? Tidak perlu mencari lagi karena kami hadir dengan Game JKT48 Member Sorter! Dengan gameplay yang mudah dimengerti dan desain yang menarik, kamu bisa dengan mudah memilih member favoritmu dan melihat peringkat mereka dibandingkan dengan yang lainnya. Mulai bermain sekarang dan temukan member JKT48 yang benar-benar mencuri hatimu.';
+
+export const twitterSeoDescription =
+  'Temukan member JKT48 favoritmu dengan game interaktif JKT48 Member Sorter yang seru! Mainkan sekarang di jkt48membersorter.vercel.app dan temukan member JKT48 yang benar-benar mencuri hatimu. #JKT48 #JKT48MemberSorter #Game';
