@@ -52,7 +52,7 @@ export const generationCopy = gen => {
 };
 
 export const seoDescription =
-  'Cari cara yang menyenangkan dan interaktif untuk menyusun daftar member JKT48 favoritmu? Tidak perlu mencari lagi karena kami hadir dengan Game JKT48 Member Sorter! Dengan gameplay yang mudah dimengerti dan desain yang menarik, kamu bisa dengan mudah memilih member favoritmu dan melihat peringkat mereka dibandingkan dengan yang lainnya. Mulai bermain sekarang dan temukan member JKT48 yang benar-benar mencuri hatimu.';
+  "Looking for a fun and interactive way to sort your favorite JKT48 members? Look no further than our JKT48 Member Sorter! With intuitive gameplay and sleek design, you'll be able to easily select your top members and see how they rank against the rest. Start playing now and discover which JKT48 member truly captures your heart.";
 
 export const twitterSeoDescription =
-  'Temukan member JKT48 favoritmu dengan game interaktif JKT48 Member Sorter yang seru! Mainkan sekarang di jkt48membersorter.vercel.app dan temukan member JKT48 yang benar-benar mencuri hatimu. #JKT48 #JKT48MemberSorter #Game';
+  'Explore and discover your favorite JKT48 members with our fun and interactive JKT48 Member Sorter game! Play now at jkt48membersorter.vercel.app and discover which JKT48 member truly captures your heart. #JKT48 #JKT48MemberSorter #Game';
