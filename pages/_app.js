@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
+import { seoDescription, twitterSeoDescription } from '../constants';
 import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
 
@@ -41,17 +42,17 @@ export default function MyApp(props) {
         <meta name="twitter:title" content="JKT48 Member Sorter" />
         <meta
           name="twitter:description"
-          content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
+          content={twitterSeoDescription}
         />
         <meta name="twitter:image" content="https://jkt48membersorter.vercel.app/logo2.png" />
         <meta
           name="description"
-          content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
+          content={seoDescription}
         />
         <meta property="og:title" content="JKT48 Member Sorter" />
         <meta
           property="og:description"
-          content="fanmade JKT48 member sorter website, a simple website to sort your favorite JKT48 members"
+          content={seoDescription}
         />
         <meta property="og:url" content="https://jkt48membersorter.vercel.app" />
         <meta property="og:type" content="website" />

@@ -50,3 +50,9 @@ export const generationCopy = gen => {
       return `${gen}th Generation`;
   }
 };
+
+export const seoDescription =
+  "Looking for a fun and interactive way to sort your favorite JKT48 members? Look no further than our JKT48 Member Sorter! With intuitive gameplay and sleek design, you'll be able to easily select your top members and see how they rank against the rest. Start playing now and discover which JKT48 member truly captures your heart.";
+
+export const twitterSeoDescription =
+  'Explore and discover your favorite JKT48 members with our fun and interactive JKT48 Member Sorter game! Play now at jkt48membersorter.vercel.app and discover which JKT48 member truly captures your heart. #JKT48 #JKT48MemberSorter #Game';
