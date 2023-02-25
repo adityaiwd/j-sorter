@@ -844,7 +844,7 @@ export const members = [
     name: 'Dhea Angelia',
     picture: '/assets/member/dhea_angelia.webp',
     generation: 7,
-    graduated: false,
+    graduated: true,
   },
   {
     name: 'Febriola Sinambela',
