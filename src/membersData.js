@@ -571,7 +571,7 @@ export const members = [
     name: 'Jinan Safa Safira',
     picture: '/assets/member/jinan_safa_safira.webp',
     generation: 4,
-    graduated: false,
+    graduated: true,
   },
   {
     name: 'Tan Zhi Hui Celine',
