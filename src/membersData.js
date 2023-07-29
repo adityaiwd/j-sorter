@@ -1018,7 +1018,7 @@ export const members = [
     name: 'Jesslyn Callista',
     picture: '/assets/member/jesslyn_callista.webp',
     generation: 7,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
