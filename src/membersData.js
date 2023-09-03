@@ -447,7 +447,7 @@ export const members = [
     name: 'Fransisca Saraswati Puspa Dewi',
     picture: '/assets/member/fransisca_saraswati_puspa_dewi.webp',
     generation: 3,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
