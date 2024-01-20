@@ -1032,7 +1032,7 @@ export const members = [
     name: 'Yessica Tamara',
     picture: '/assets/member/yessica_tamara.webp',
     generation: 7,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
