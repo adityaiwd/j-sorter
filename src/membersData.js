@@ -1475,14 +1475,14 @@ export const members = [
     picture: '/assets/member/grace_octaviani.webp',
     generation: 11,
     graduated: false,
-    trainee: true,
+    trainee: false,
   },
   {
     name: 'Greesella Adhalia',
     picture: '/assets/member/greesella_adhalia.webp',
     generation: 11,
     graduated: false,
-    trainee: true,
+    trainee: false,
   },
   {
     name: 'Jeane Victoria',
