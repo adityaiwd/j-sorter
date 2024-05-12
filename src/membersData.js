@@ -454,7 +454,7 @@ export const members = [
     name: 'Shani Indira Natio',
     picture: '/assets/member/shani_indira_natio.webp',
     generation: 3,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
