@@ -51,6 +51,19 @@ export const generationCopy = gen => {
   }
 };
 
+export const ordinalNumber = num => {
+  switch (num) {
+    case 1:
+      return `${num}st`;
+    case 2:
+      return `${num}nd`;
+    case 3:
+      return `${num}rd`;
+    default:
+      return `${num}th`;
+  }
+};
+
 export const seoDescription =
   "Looking for a fun and interactive way to sort your favorite JKT48 members? Look no further than our JKT48 Member Sorter! With intuitive gameplay and sleek design, you'll be able to easily select your top members and see how they rank against the rest. Start playing now and discover which JKT48 member truly captures your heart.";
 
