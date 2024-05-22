@@ -1488,8 +1488,8 @@ export const members = [
     name: 'Jeane Victoria',
     picture: '/assets/member/jeane_victoria.webp',
     generation: 11,
-    graduated: false,
-    trainee: true,
+    graduated: true,
+    trainee: false,
   },
   {
     name: 'Michelle Alexandra',
