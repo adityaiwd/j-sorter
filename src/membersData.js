@@ -1517,7 +1517,7 @@ export const members = [
     name: 'Aisa Maharani',
     picture: '/assets/member/aisa_maharani.webp',
     generation: 12,
-    graduated: false,
+    graduated: true,
     trainee: true,
   },
   {
