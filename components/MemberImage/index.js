@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Wrapper } from './style';
+import { Wrapper, cardStyles, shineStyles } from './style';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -11,11 +11,12 @@ import { Typography, CardActionArea, Box } from '@mui/material';
 
 const MemberImage = ({ member, onClick }) => {
   const { picture, name, generation, graduated } = member;
+  const isOrel = name === 'Aurellia'
   return (
-    <Wrapper item xs={5} alignSelf="stretch">
+    <Wrapper sx={isOrel ? cardStyles : undefined} item xs={5} alignSelf="stretch">
       <Card sx={{ width: '100%' }} onClick={onClick}>
         <CardActionArea>
-          <CardMedia component="div" sx={{height: 200, position:'relative'}}>
+          <CardMedia component="div" sx={{ height: 200, position: 'relative' }}>
             <Image
               blurDataURL="/assets/blurImage.jpg"
               placeholder="blur"
@@ -47,6 +48,7 @@ const MemberImage = ({ member, onClick }) => {
               <ActiveChip graduated={graduated} />
             </Box>
           </CardContent>
+          {isOrel && <Box sx={shineStyles}></Box>}
         </CardActionArea>
       </Card>
     </Wrapper>
