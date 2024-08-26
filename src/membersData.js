@@ -976,7 +976,7 @@ export const members = [
     name: 'Azizi Asadel',
     picture: '/assets/member/azizi_asadel.webp',
     generation: 7,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
