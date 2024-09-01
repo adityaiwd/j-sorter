@@ -31,6 +31,7 @@ const MemberImage = ({ member, onClick }) => {
               gutterBottom
               variant="h6"
               component="div"
+              className="notranslate"
               sx={{
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
