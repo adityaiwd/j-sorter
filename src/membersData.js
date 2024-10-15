@@ -1138,7 +1138,7 @@ export const members = [
     name: 'Reva Fidela',
     picture: '/assets/member/reva_fidela.webp',
     generation: 8,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
