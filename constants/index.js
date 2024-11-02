@@ -51,6 +51,19 @@ export const generationCopy = gen => {
   }
 };
 
+export const generationCopyShort = gen => {
+  switch (gen) {
+    case 1:
+      return `${gen}st Gen`;
+    case 2:
+      return `${gen}nd Gen`;
+    case 3:
+      return `${gen}rd Gen`;
+    default:
+      return `${gen}th Gen`;
+  }
+}
+
 export const seoDescription =
   "Looking for a fun and interactive way to sort your favorite JKT48 members? Look no further than our JKT48 Member Sorter! With intuitive gameplay and sleek design, you'll be able to easily select your top members and see how they rank against the rest. Start playing now and discover which JKT48 member truly captures your heart.";
 

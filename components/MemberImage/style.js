@@ -50,3 +50,55 @@ export const shineStyles = css({
   position: 'absolute',
   animation: `${shine} 6s ease-in-out infinite`,
 });
+
+export const containerStyle = css({
+  width: '100%',
+  borderRadius: '0.6rem',
+  background: 'rgba(255, 255, 255, 0.7)',
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  cursor: 'pointer',
+  transition: 'transform 0.2s ease',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+  },
+  '&:active': {
+    transform: 'translateY(-2px)',
+  },
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+});
+
+export const imageWrapperStyle = css({
+  width: '100%',
+  padding: '5%',
+  position: 'relative',
+  overflow: 'hidden',
+});
+
+export const imageStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  borderRadius: '0.65rem',
+};
+
+export const detailsContainerStyle = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  margin: '0 .5rem .5rem',
+  flexWrap: 'wrap',
+  alignSelf: 'flex-start',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  wordWrap: 'break-word',
+  whiteSpace: 'normal',
+  width: '100%',
+});
+
+export const memberNameStyle = {
+  fontSize: '1.2rem',
+  fontWeight: 700,
+};

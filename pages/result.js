@@ -62,7 +62,7 @@ export default function Index() {
         </Typography>
         <Box sx={{ flexWrap: 'wrap' }}>
           <Chip label={status} color="primary" size="small" sx={{ fontWeight: 400, fontSize: '1.2rem', mb: 0.5 }} />
-          {checkFilteredAllGenerations(memberStatus,generations) ? (
+          {checkFilteredAllGenerations(memberStatus, generations) ? (
             <Chip
               label={'All Generation'}
               size="small"
@@ -145,7 +145,7 @@ export default function Index() {
                     {generationCopy(data.generation)}
                   </Typography>
                   <Typography
-                    sx={{ display: 'inline', fontSize: '1.2rem', fontWeight: 600 }}
+                    sx={{ display: 'inline', fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase' }}
                     component="span"
                     variant="body2"
                     color={!data.graduated ? 'green' : 'grey'}
@@ -194,7 +194,7 @@ export default function Index() {
                       <Typography
                         sx={{
                           display: 'inline-block',
-                          fontSize: '1.4rem',
+                          fontSize: '1rem',
                           fontWeight: 600,
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
@@ -208,7 +208,7 @@ export default function Index() {
                         {data.name}
                       </Typography>
                       <Typography
-                        sx={{ display: 'inline', fontSize: '1rem' }}
+                        sx={{ display: 'inline', fontSize: '.9rem' }}
                         component="span"
                         variant="body2"
                         color="text.primary"
@@ -216,7 +216,7 @@ export default function Index() {
                         {generationCopy(data.generation)}
                       </Typography>
                       <Typography
-                        sx={{ display: 'inline', fontSize: '1rem', fontWeight: 600 }}
+                        sx={{ display: 'inline', fontSize: '1rem', fontWeight: 600, textTransform: 'uppercase', mt: .5 }}
                         component="span"
                         variant="body2"
                         color={!data.graduated ? 'green' : 'grey'}
