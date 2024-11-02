@@ -1,57 +1,60 @@
 import React from 'react';
 import Image from 'next/image';
-import { Wrapper, cardStyles, shineStyles } from './style';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { generationCopy } from '../../constants';
+import { Wrapper, cardStyles, containerStyle, imageWrapperStyle, imageStyle, detailsContainerStyle } from './style';
+import { generationCopyShort } from '../../constants';
 import ActiveChip from '../ActiveChip';
+import Ribbon from '../Ribbon';
 
-import { Typography, CardActionArea, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+
+const generationColorMapper = {
+  1: 'white',
+  2: 'red',
+  3: 'pink',
+  4: 'purple',
+  5: 'blue-grey',
+  6: 'light-green',
+  7: 'green',
+  8: 'blue-sky',
+  9: 'blue-dodger',
+  10: 'light-blue',
+  11: 'orange',
+  12: 'beige',
+  13: 'yellow',
+};
 
 const MemberImage = ({ member, onClick }) => {
   const { picture, name, generation, graduated } = member;
-  const isOrel = name === 'Aurellia'
+  const isOrel = name === 'Aurellia';
   return (
     <Wrapper sx={isOrel ? cardStyles : undefined} item xs={5} alignSelf="stretch">
-      <Card sx={{ width: '100%' }} onClick={onClick}>
-        <CardActionArea>
-          <CardMedia component="div" sx={{ height: 200, position: 'relative' }}>
-            <Image
-              blurDataURL="/assets/blurImage.jpg"
-              placeholder="blur"
-              src={picture}
-              alt={name}
-              layout="fill"
-              objectFit="cover"
-            />
-          </CardMedia>
-          <CardContent>
+      <Ribbon content={generationCopyShort(generation)} color={generationColorMapper[generation]}>
+        <Box sx={containerStyle} onClick={onClick}>
+          <Box sx={imageWrapperStyle}>
+            <Image src={picture} alt="product-image" width={256} height={325} style={imageStyle} objectFit="cover" />
+          </Box>
+          <Box sx={detailsContainerStyle}>
             <Typography
               gutterBottom
               variant="h6"
               component="div"
               className="notranslate"
               sx={{
-                textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                fontSize: '1.2rem',
-                fontWeight: 700,
+                textOverflow: 'ellipsis',
+                wordWrap: 'break-word',
+                whiteSpace: 'normal',
+                fontSize: '1.25rem',
+                fontWeight: 500,
+                width: '100%',
               }}
             >
               {name}
             </Typography>
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="subtitle1" color="text.secondary" sx={{ fontSize: '1.2rem' }}>
-                {generationCopy(generation)}
-              </Typography>
-              <ActiveChip graduated={graduated} />
-            </Box>
-          </CardContent>
-          {isOrel && <Box sx={shineStyles}></Box>}
-        </CardActionArea>
-      </Card>
+            <ActiveChip graduated={graduated} />
+          </Box>
+        </Box>
+      </Ribbon>
     </Wrapper>
   );
 };

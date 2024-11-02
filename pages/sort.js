@@ -143,10 +143,13 @@ export default function Sort() {
             container
             alignItems="center"
             spacing={1}
-            sx={{
-              height: 250,
-              mb: 6,
-            }}
+            sx={
+              loading
+                ? {
+                    height: 235,
+                  }
+                : undefined
+            }
           >
             {!loading && member1.id ? (
               <MemberImage member={member1} onClick={() => handlePick('home')} />
