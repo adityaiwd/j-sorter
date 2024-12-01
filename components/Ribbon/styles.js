@@ -66,6 +66,11 @@ const ribbonColorMapper = {
     foldColor: '#aa9b82',
     color: '#FFFFFF',
   },
+  yellow: {
+    background: '#F7E078',
+    foldColor: '#EAD984',
+    color: '#1E1E1E'
+  }
 };
 
 export const cssRibbon = (color = 'default') =>
