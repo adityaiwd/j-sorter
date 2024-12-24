@@ -1350,7 +1350,7 @@ export const members = [
     name: 'Callista Alifia',
     picture: '/assets/member/callista_alifia.webp',
     generation: 10,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
