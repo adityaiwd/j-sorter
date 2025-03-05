@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Wrapper, cardStyles, containerStyle, imageWrapperStyle, imageStyle, detailsContainerStyle } from './style';
+import { Wrapper, containerStyle, imageWrapperStyle, imageStyle, detailsContainerStyle } from './style';
 import { generationCopyShort } from '../../constants';
 import ActiveChip from '../ActiveChip';
 import Ribbon from '../Ribbon';
@@ -25,9 +25,8 @@ const generationColorMapper = {
 
 const MemberImage = ({ member, onClick }) => {
   const { picture, name, generation, graduated } = member;
-  const isOrel = name === 'Aurellia';
   return (
-    <Wrapper sx={isOrel ? cardStyles : undefined} item xs={5} alignSelf="stretch">
+    <Wrapper item xs={5} alignSelf="stretch">
       <Ribbon content={generationCopyShort(generation)} color={generationColorMapper[generation]}>
         <Box sx={containerStyle} onClick={onClick}>
           <Box sx={imageWrapperStyle}>
