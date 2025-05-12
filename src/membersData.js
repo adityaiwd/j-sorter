@@ -1559,8 +1559,8 @@ export const members = [
     name: 'Letycia Moreen',
     picture: '/assets/member/letycia_moreen.webp',
     generation: 12,
-    graduated: false,
-    trainee: true,
+    graduated: true,
+    trainee: false,
   },
   {
     name: 'Michelle Levia',
