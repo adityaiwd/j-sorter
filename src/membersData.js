@@ -1364,7 +1364,7 @@ export const members = [
     name: 'Indira Seruni',
     picture: '/assets/member/indira_seruni.webp',
     generation: 10,
-    graduated: false,
+    graduated: true,
     trainee: false,
   },
   {
@@ -1594,7 +1594,7 @@ export const members = [
     name: 'Regina Wilian',
     picture: '/assets/member/regina_wilian.webp',
     generation: 12,
-    graduated: false,
+    graduated: true,
     trainee: true,
   },
   {
